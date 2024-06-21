@@ -1,0 +1,175 @@
+/* Estilos generales */
+body {
+  background-color: aqua;
+  margin: 0;
+  padding: 0;
+  font-family: Arial, Helvetica, sans-serif;
+}
+
+.retroceder {
+  position: relative;
+  width: 50px;
+}
+
+/* Contenedor principal */
+.contenedor {
+  width: 90%;
+  max-width: 1200px;
+  margin: 20px auto;
+  padding: 20px;
+  background: rgb(247, 248, 250);
+  border-radius: 30px;
+  overflow: hidden; /* Evitar que el contenido se desborde */
+}
+
+/* Table Container */
+.table-container {
+  width: 90%;
+  max-width: 1200px;
+  margin: 20px auto;
+  padding: 20px;
+  background: rgb(247, 248, 250);
+  border-radius: 30px;
+  overflow: hidden; /* Evitar que el contenido se desborde */
+}
+
+/* Títulos */
+h1 {
+  text-align: center;
+  margin-top: 10px;
+  font-size: 24px;
+}
+
+/* Mensajes de alerta */
+.alert-message {
+  padding: 10px;
+  margin-bottom: 10px;
+  border: 1px solid transparent;
+  border-radius: 4px;
+}
+
+.alert-message-success {
+  color: green;
+  background-color: #dff0d8;
+  border-color: #d6e9c6;
+}
+
+.alert-message-error {
+  color: red;
+  background-color: #f8d7da;
+  border-color: #f5c6cb;
+}
+
+/* Paginación */
+.pagination {
+  text-align: center;
+  margin-top: 20px;
+  overflow: hidden; /* Ocultar el desbordamiento de la paginación */
+}
+
+.pagination a {
+  display: inline-block;
+  padding: 5px 10px;
+  margin: 0 5px;
+  background-color: #f2f2f2;
+  border: 1px solid #ccc;
+  border-radius: 3px;
+  text-decoration: none;
+}
+
+.pagination a.active {
+  background-color: #4CAF50;
+  color: white;
+}
+
+/* Solicitudes */
+.solicitud {
+  margin-bottom: 20px; /* Asegurar que haya espacio entre las solicitudes */
+}
+
+.solicitud h3 {
+  margin: 0;
+  font-size: 18px;
+  color: #333;
+}
+
+.solicitud p {
+  margin: 8px 0;
+  font-size: 16px;
+  color: #666;
+}
+
+.solicitud a {
+  display: inline-block;
+  padding: 8px 16px;
+  margin-top: 10px;
+  background-color: #007bff;
+  color: #fff;
+  text-decoration: none;
+  border-radius: 5px;
+  transition: background-color 0.3s ease;
+}
+
+.solicitud a:hover {
+  background-color: #0056b3;
+}
+
+/* Media queries para hacer que el diseño sea responsive */
+
+/* Móviles */
+@media (max-width: 767px) {
+  .contenedor,
+  .table-container {
+    padding: 10px;
+    overflow-x: auto; /* Permite desplazamiento horizontal en dispositivos móviles */
+  }
+
+  h1 {
+    font-size: 20px;
+  }
+
+  /* Ajustes para la solicitud */
+  .solicitud {
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    padding: 10px;
+    margin-bottom: 10px;
+  }
+
+  .solicitud h3 {
+    margin-top: 0;
+  }
+
+  .pagination {
+    margin-top: 10px;
+    overflow-x: auto; /* Permite desplazamiento horizontal en dispositivos móviles */
+  }
+
+  .pagination a {
+    padding: 3px 8px;
+    font-size: 12px;
+  }
+}
+
+/* Tablets y pantallas más grandes */
+@media (min-width: 768px) {
+  h1 {
+    font-size: 24px;
+  }
+
+  .solicitud {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+  }
+
+  .solicitud h3 {
+    margin-top: 0;
+    flex: 100%;
+  }
+
+  .pagination a {
+    padding: 5px 10px;
+    font-size: 14px;
+  }
+}

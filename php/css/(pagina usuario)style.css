@@ -1,0 +1,55 @@
+
+*{
+    margin: 0;
+    padding: 0;
+    box-sizing: 0;
+    font-family: Arial, Helvetica, sans-serif;
+  }
+  body{
+    background-color: rgb(9, 207, 207);
+  }
+  nav{
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding-top: 20px;
+    padding-left: 10%;
+    padding-right: 5%;
+    font-weight: bold;
+    background-color: rgb(39, 143, 108);
+  }
+.perfil{
+    font-family: Arial, Helvetica, sans-serif;
+   font-size: 22;
+   text-align: center;
+   position: absolute;
+}
+
+img{
+    text-align: center;
+    width: 290px;
+    height: 390px;
+}
+.nombre{
+    font-family: Arial, Helvetica, sans-serif;
+    font-size: 16;
+    text-align: center;
+    position: absolute;
+}
+.link{
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding-top: 20px;
+    font-weight: bold;
+    background-color: aquamarine;
+    font-family: Arial, Helvetica, sans-serif;
+    text-decoration: none;
+    cursor: pointer;
+  }
+  @media(max-width:991px)and (min-width:768px){
+
+  }
+    .link:hover{
+    color: rgb(222, 12, 241);
+  }
