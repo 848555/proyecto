@@ -1,5 +1,6 @@
-
-
+<?php 
+session_start();
+?>
 <!DOCTYPE html>
 <html lang="en">
 
@@ -12,7 +13,20 @@
     <script src="https://kit.fontawesome.com/35f3448c23.js" crossorigin="anonymous"></script>
     <title>DOCUMENTOS DE MOTOTAXISTAS</title>
 </head>
+<?php
 
+
+// Verificar si hay un mensaje en la sesión
+if (isset($_SESSION['mensaje'])) {
+    // Mostrar el mensaje
+    echo '<div class="alert alert-info">' . $_SESSION['mensaje'] . '</div>';
+    
+    // Limpiar el mensaje de la sesión para evitar que se muestre nuevamente
+    unset($_SESSION['mensaje']);
+}
+
+// Aquí puedes continuar con el resto del contenido de tu página
+?>
 <body>
     <nav class="navbar navbar-expand-lg bg-body-tertiary">
         <div class="container-fluid">
@@ -86,7 +100,7 @@
                         
                        
                          <td>
-                         <a onclick="return eliminar()" href="/admin/eliminar_servicios.php?id=<?= $datos->id ?>" class="btn btn-small btn-danger"><i class="fa-solid fa-trash"></i></a>
+                         <a onclick="return eliminar()" href="/admin/eliminar_servicios.php?id_solicitud=<?= $datos->id_solicitud ?>" class="btn btn-small btn-danger"><i class="fa-solid fa-trash"></i></a>
                          </td>
 
                     </tr>

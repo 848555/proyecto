@@ -1,4 +1,6 @@
 <?php
+
+session_start();
 include("/xampp/htdocs/prueba/conexion/conexion.php");
 
 $sql = $conexion->query("
@@ -31,7 +33,19 @@ $sql = $conexion->query("
     <script src="https://kit.fontawesome.com/35f3448c23.js" crossorigin="anonymous"></script>
     <title>DOCUMENTOS DE MOTOTAXISTAS</title>
 </head>
+<?php
 
+
+// Mostrar mensajes de éxito o error
+if (isset($_SESSION['success'])) {
+    echo '<div class="alert alert-success">' . $_SESSION['success'] . '</div>';
+    unset($_SESSION['success']); // Limpiar mensaje de éxito
+}
+if (isset($_SESSION['error'])) {
+    echo '<div class="alert alert-danger">' . $_SESSION['error'] . '</div>';
+    unset($_SESSION['error']); // Limpiar mensaje de error
+}
+?>
 <body>
     <nav class="navbar navbar-expand-lg bg-body-tertiary">
         <div class="container-fluid">

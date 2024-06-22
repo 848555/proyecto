@@ -1,13 +1,16 @@
 <?php
 require("/xampp/htdocs/prueba/conexion/conexion.php");
 
+// Iniciar sesión
+session_start();
+
 // Verificar si 'id' está configurado
 if (isset($_GET['id'])) {
     // Obtener el valor de 'id' de forma segura
     $id = filter_input(INPUT_GET, 'id', FILTER_VALIDATE_INT);
 
     if ($id === false || $id === null) {
-        echo "El ID no es válido.";
+        $_SESSION['error'] = "El ID no es válido.";
     } else {
         // Preparar la consulta SQL
         $sql = "DELETE FROM documentos WHERE id_documentos = ?";
@@ -20,20 +23,22 @@ if (isset($_GET['id'])) {
 
             // Ejecutar la consulta
             if ($stmt->execute()) {
-                // Redirigir si la eliminación fue exitosa
-                header("Location: mototaxistas.php");
-                exit();
+                $_SESSION['success'] = "Registro eliminado exitosamente.";
             } else {
-                echo "Error al eliminar el registro: " . $stmt->error;
+                $_SESSION['error'] = "Error al eliminar el registro: " . $stmt->error;
             }
         } else {
-            echo "Error al preparar la consulta: " . $conexion->error;
+            $_SESSION['error'] = "Error al preparar la consulta: " . $conexion->error;
         }
     }
 } else {
-    echo "ID no configurado.";
+    $_SESSION['error'] = "ID no configurado.";
 }
 
 // Cerrar la conexión
 $conexion->close();
+
+// Redirigir
+header("Location: mototaxistas.php");
+exit();
 ?>
