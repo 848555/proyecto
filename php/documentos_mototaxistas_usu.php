@@ -71,6 +71,5 @@ $stmt->close();
     <?php else: ?>
         <p>Lo siento no se encontraron documentos para mostrar, no has subido documentos.</p>
     <?php endif; ?>
-    <a  href="/php/inicio.php" class="btn-regresar">Regresar</a>
 </body>
 </html>

@@ -421,11 +421,6 @@ main.min-main{
   border-color: #d6e9c6;
 }
 
-/* Estilos específicos para el contenedor del modal */
-.modal-container {
-  /* Puedes agregar estilos específicos para el contenedor del modal aquí si es necesario */
-}
-
 /* Estilos para el modal */
 .modal {
   display: none;
@@ -489,6 +484,92 @@ main.min-main{
   color: #888;
   font-size: 0.9em;
   margin-top: 5px;
+}
+
+/* Estilos específicos para el input de contraseña dentro del modal */
+.modal-ul li {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+}
+
+.modal-ul li span.mensa {
+  font-size: 14px; /* Ajusta el tamaño de fuente según sea necesario */
+  margin-bottom: 5px; /* Espacio debajo del span */
+}
+
+.modal-ul li input[type="password"] {
+  width: calc(100% - 20px); /* Ancho del input menos el padding */
+  padding: 8px;
+  font-size: 16px;
+  margin-bottom: 10px; /* Espacio debajo del input */
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  box-sizing: border-box;
+}
+
+/* Estilo para el botón dentro del modal */
+.modal-ul li button {
+  padding: 10px 20px;
+  background-color: #007BFF;
+  color: white;
+  border: none;
+  cursor: pointer;
+  border-radius: 4px;
+}
+
+.modal-ul li button:hover {
+  background-color: #0056b3;
+}
+
+
+.dropdown {
+  position: relative;
+  display: inline-block;
+  margin-left: 20px; /* Ajusta según necesites */
+}
+
+.dropdown-content {
+  display: none;
+  position: absolute;
+  background-color: #fff; /* Fondo blanco */
+  min-width: 160px;
+  box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.2);
+  z-index: 1;
+  border-radius: 5px; /* Añade bordes redondeados */
+  padding: 8px 0;
+  text-align: left;
+}
+
+.dropdown-content a {
+  display: block;
+  padding: 10px;
+  color: black;
+  text-decoration: none;
+  font-size: 14px;
+}
+
+.dropdown-content a:hover {
+  background-color: #f1f1f1; /* Color de fondo al pasar el ratón */
+}
+
+.dropdown:hover .dropdown-content {
+  display: block;
+}
+
+.mensa {
+  font-family: Arial, sans-serif;
+  font-size: 10px; /* Tamaño de fuente pequeño */
+  color: #333;
+}
+.error-message {
+  color: #ff0000; /* Color rojo para indicar un mensaje de error */
+  font-weight: bold; /* Fuente en negrita para hacer el mensaje más destacado */
+  margin: 10px 0; /* Espacio alrededor del mensaje */
+  padding: 10px; /* Relleno dentro del contenedor del mensaje */
+  background-color: #ffe6e6; /* Fondo color pastel para resaltar el mensaje */
+  border: 1px solid #ff9999; /* Borde rojo claro alrededor del mensaje */
+  border-radius: 5px; /* Bordes redondeados para el contenedor del mensaje */
 }
 /*------------------> Responsive*/
 /* Estilos para altura máxima de 660px */

@@ -12,7 +12,7 @@ session_start();
     <title>Login y Register</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
     <link href="https://fonts.googleapis.com/css2?family=Roboto:ital,wght@0,100;0,300;0,400;0,500;0,700;0,900;1,100;1,300;1,400;1,500;1,700;1,900&display=swap" rel="stylesheet">
-
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
 
     <link rel="stylesheet" href="/login/css/login.css">
 </head>
@@ -98,7 +98,10 @@ session_start();
                     
                     <input type="text" placeholder="Direccion de residencia" name="direccion" id="direccion">
                     <input type="text" placeholder="Usuario" name="usuario" id="usuario">
-                    <input type="password" placeholder="Contraseña" name="contraseña" id="contraseña">
+                    <div class="password-container">
+                    <input type="password" placeholder="Contraseña" name="contraseña" id="contraseña" class="password-input">
+                    <i class="fas fa-eye toggle-password" onclick="togglePasswordVisibility('contraseña')"></i>
+                    </div>
                     <button type="submit" class="btn btn-primary" name="btnregistrar" value="ok">Regístrarme</button>
                 </form>
             </div>

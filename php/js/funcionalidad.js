@@ -92,3 +92,53 @@
             }, 5000); // 5000 milisegundos = 5 segundos
         }
     });
+
+
+    // modal de configuracion
+    document.addEventListener('DOMContentLoaded', function() {
+        // Obtener elementos del DOM
+        const eliminarCuentaLink = document.getElementById('eliminarCuentaLink');
+        const politicasLink = document.getElementById('politicasLink');
+        const eliminarCuentaModal = document.getElementById('eliminarCuentaModal');
+        const politicasModal = document.getElementById('politicasModal');
+
+        // Mostrar modal para eliminar cuenta al hacer clic en "Eliminar cuenta"
+        eliminarCuentaLink.addEventListener('click', function(e) {
+            e.preventDefault();
+            eliminarCuentaModal.style.display = 'block';
+        });
+
+        // Mostrar modal de políticas y privacidad al hacer clic en "Políticas y privacidad"
+        politicasLink.addEventListener('click', function(e) {
+            e.preventDefault();
+            politicasModal.style.display = 'block';
+        });
+
+        // Cerrar modales al hacer clic en la 'X' de cada modal
+        const closeButtons = document.getElementsByClassName('close');
+        for (let i = 0; i < closeButtons.length; i++) {
+            closeButtons[i].addEventListener('click', function() {
+                eliminarCuentaModal.style.display = 'none';
+                politicasModal.style.display = 'none';
+            });
+        }
+
+        // Cerrar modales al hacer clic fuera del contenido del modal
+        window.onclick = function(event) {
+            if (event.target == eliminarCuentaModal) {
+                eliminarCuentaModal.style.display = 'none';
+            }
+            if (event.target == politicasModal) {
+                politicasModal.style.display = 'none';
+            }
+        }
+    });
+
+
+    // Función para ocultar el mensaje de error después de 5 segundos
+setTimeout(function() {
+    var errorMessage = document.getElementById('error-message');
+    if (errorMessage) {
+        errorMessage.style.display = 'none';
+    }
+}, 5000); // 5000 milisegundos = 5 segundos

@@ -24,28 +24,13 @@ if (!isset($_SESSION['id_usuario']) || $_SESSION['rol'] != 2) {
 </head>
 
 <body>
-
-    <?php if (!empty($mensaje)) : ?>
-        <div class="mensaje" id="mensaje">
-            <p><?= $mensaje ?></p>
-        </div>
-
-
-        <?php if (isset($_SESSION['mensaje_solicitante'])) : ?>
-            <div id='mensaje-solicitante' class='alert-message alert-message-success'>
-                <?= $_SESSION['mensaje_solicitante'] ?>
-            </div>
-            <?php unset($_SESSION['mensaje_solicitante']); // Eliminar el mensaje de sesión después de mostrarlo 
-            ?>
-
-        <?php endif; ?>
-    <?php endif; ?>
-    <?php if (isset($_SESSION['mensaje_solicitante'])) {
-        echo "<div id='mensaje-solicitante' class='alert-message alert-message-success'>";
-        echo $_SESSION['mensaje_solicitante'];
-        echo "</div>";
-        unset($_SESSION['mensaje_solicitante']); // Eliminar el mensaje de sesión después de mostrarlo
-    } ?>
+    <?php
+// Verificar si hay un mensaje de error al eliminar la cuenta
+if (isset($_SESSION['error_message'])) {
+    echo '<div id="error-message" class="error-message">' . $_SESSION['error_message'] . '</div>';
+    unset($_SESSION['error_message']); // Limpiar el mensaje de error después de mostrarlo
+}
+?>
 
     <div class="menu" id="menu">
         <ion-icon name="menu-outline" id="menuIcon"></ion-icon>
@@ -90,12 +75,46 @@ if (!isset($_SESSION['id_usuario']) || $_SESSION['rol'] != 2) {
                         <span>Mis documentos</span>
                     </a>
                 </li>
-                <li>
-                    <a href="#">
+
+
+                <div class="dropdown">
+                    <span id="configLink" class="dropbtn">
                         <ion-icon name="construct-outline"></ion-icon>
-                        <span>Configuración</span>
-                    </a>
+                        Configuración
+                    </span>
+                    <div class="dropdown-content">
+                        <a href="#" id="eliminarCuentaLink">Eliminar cuenta</a>
+                        <a href="#" id="politicasLink">Políticas y privacidad</a>
+                    </div>
+                </div>
+
+              <!-- Modal para eliminar cuenta -->
+<div id="eliminarCuentaModal" class="modal">
+    <div class="modal-content">
+        <span class="close">&times;</span>
+        <h2>Eliminar cuenta</h2>
+        <form method="POST" action="/php/procesar/eliminar_cuenta.php">
+            <ul class="modal-ul">
+                <li>
+                    <span class="mensa">Ingresa tu contraseña para eliminar</span> 
+                    <input class="password" type="password" name="password" id="passwordInput" required>
                 </li>
+                <li><button type="submit" id="confirmarEliminarBtn">Confirmar</button></li>
+            </ul>
+        </form>
+    </div>
+</div>
+
+
+                <!-- Modal para mostrar políticas y privacidad -->
+                <div id="politicasModal" class="modal">
+                    <div class="modal-content">
+                        <span class="close">&times;</span>
+                        <h2>Políticas y privacidad</h2>
+                        <p>Aquí van las políticas y la información de privacidad.</p>
+                    </div>
+                </div>
+
                 <li>
                     <a href="/login/login.php?vista=logout">
                         <ion-icon name="power-outline"></ion-icon>
@@ -160,7 +179,8 @@ if (!isset($_SESSION['id_usuario']) || $_SESSION['rol'] != 2) {
     </div>
 
     <script type="module" src="https://unpkg.com/ionicons@7.1.0/dist/ionicons/ionicons.esm.js"></script>
-    </script type="module" src="https://unpkg.com/ionicons@7.1.0/dist/ionicons/ionicons.js"></scriptnomodule>
+    </script type="module" src="https://unpkg.com/ionicons@7.1.0/dist/ionicons/ionicons.js">
+    </scriptnomodule>
     <script src="/php/js/funcionalidad.js"></script>
     <script src="/php/js/script.js"></script>
 
