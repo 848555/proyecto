@@ -10,7 +10,7 @@ if (isset($_POST['usuario']) && isset($_POST['password'])) {
     $password = $_POST['password'];
 
     // Imprimir valores de depuración
-    echo "Usuario: $usuario, Password: $password<br>";
+   // echo "Usuario: $usuario, Password: $password<br>";
 
     // Preparar y ejecutar la consulta SQL de forma segura para prevenir inyecciones SQL
     $consulta = "SELECT * FROM usuarios WHERE Usuario=? AND Password=?";

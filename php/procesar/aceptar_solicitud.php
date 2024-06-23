@@ -26,10 +26,13 @@ $stmt = $conexion->prepare($sql_update);
 $stmt->bind_param("ii", $id_solicitud, $id_usuario);
 
 if ($stmt->execute()) {
-    $stmt->close();
-
-    // Mensaje para el usuario que solicitó el servicio
-    $_SESSION['mensaje_solicitante'] = "Tu solicitud ha sido aceptada. Enseguida van por ti, espera en el lugar acordado.";
+    // Insertar mensaje en la tabla de mensajes
+    $mensaje = "Tu solicitud ha sido aceptada. Enseguida van por ti, espera en el lugar acordado.";
+    $sql_insert_mensaje = "INSERT INTO mensajes_temporales (id_solicitud, id_usuario, mensaje, fecha) VALUES (?, ?, ?, NOW())";
+    $stmt_insert = $conexion->prepare($sql_insert_mensaje);
+    $stmt_insert->bind_param("iis", $id_solicitud, $id_usuario, $mensaje);
+    $stmt_insert->execute();
+    $stmt_insert->close();
 
     // Mensaje de éxito para el usuario que aceptó la solicitud
     $_SESSION['success_message'] = "Solicitud aceptada correctamente y notificación enviada al solicitante.";
@@ -41,5 +44,6 @@ if ($stmt->execute()) {
     exit;
 }
 
+$stmt->close();
 $conexion->close();
 ?>

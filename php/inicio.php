@@ -30,33 +30,22 @@ if (!isset($_SESSION['id_usuario']) || $_SESSION['rol'] != 2) {
             <p><?= $mensaje ?></p>
         </div>
 
-        <script>
-            // Mostrar el mensaje si existe
-            document.addEventListener('DOMContentLoaded', function() {
-                var mensajeDiv = document.getElementById('mensaje');
-                if (mensajeDiv && mensajeDiv.innerText.trim() !== '') {
-                    mensajeDiv.style.display = 'block';
-                    // Ocultar el mensaje después de 5 segundos
-                    setTimeout(function() {
-                        mensajeDiv.style.display = 'none';
-                    }, 5000); // 5000 milisegundos = 5 segundos
-                }
-            });
-        </script>
-         <?php if (isset($_SESSION['mensaje_solicitante'])) : ?>
-        <div id='mensaje-solicitante' class='alert-message alert-message-success'>
-            <?= $_SESSION['mensaje_solicitante'] ?>
-        </div>
-        <?php unset($_SESSION['mensaje_solicitante']); // Eliminar el mensaje de sesión después de mostrarlo ?>
-       
+
+        <?php if (isset($_SESSION['mensaje_solicitante'])) : ?>
+            <div id='mensaje-solicitante' class='alert-message alert-message-success'>
+                <?= $_SESSION['mensaje_solicitante'] ?>
+            </div>
+            <?php unset($_SESSION['mensaje_solicitante']); // Eliminar el mensaje de sesión después de mostrarlo 
+            ?>
+
+        <?php endif; ?>
     <?php endif; ?>
-    <?php endif; ?>
-    <?php   if (isset($_SESSION['mensaje_solicitante'])) {
-                echo "<div id='mensaje-solicitante' class='alert-message alert-message-success'>";
-                echo $_SESSION['mensaje_solicitante'];
-                echo "</div>";
-                unset($_SESSION['mensaje_solicitante']); // Eliminar el mensaje de sesión después de mostrarlo
-            }?>
+    <?php if (isset($_SESSION['mensaje_solicitante'])) {
+        echo "<div id='mensaje-solicitante' class='alert-message alert-message-success'>";
+        echo $_SESSION['mensaje_solicitante'];
+        echo "</div>";
+        unset($_SESSION['mensaje_solicitante']); // Eliminar el mensaje de sesión después de mostrarlo
+    } ?>
 
     <div class="menu" id="menu">
         <ion-icon name="menu-outline" id="menuIcon"></ion-icon>
@@ -77,14 +66,26 @@ if (!isset($_SESSION['id_usuario']) || $_SESSION['rol'] != 2) {
                         <span>Perfil</span>
                     </a>
                 </li>
+
                 <li>
-                    <a href="#">
+                    <a href="#" id="openModalBtn">
                         <ion-icon name="paper-plane-outline"></ion-icon>
-                        <span>Mis solicitudes</span>
+                        <span>Mis mensajes</span>
                     </a>
+                    <?php include '/xampp/htdocs/prueba/conexion/conexion.php'; ?>
                 </li>
+
+                <!-- Modal -->
+                <div id="mensajeModal" class="modal">
+                    <div class="modal-content">
+                        <span class="close">&times;</span>
+                        <div id="mensajesContainer"></div> <!-- Contenedor para mensajes -->
+                    </div>
+                </div>
+
+
                 <li>
-                    <a href="#">
+                    <a href="/php/documentos_mototaxistas_usu.php">
                         <ion-icon name="newspaper-outline"></ion-icon>
                         <span>Mis documentos</span>
                     </a>
@@ -132,16 +133,16 @@ if (!isset($_SESSION['id_usuario']) || $_SESSION['rol'] != 2) {
 
 
     <div class="contenedor">
-   
+
         <div class="info">
-         
+
             <h2>Bienvenido <?php echo $_SESSION['usuario']; ?></h2>
             <?php
             if (isset($_SESSION['messaje'])) {
                 echo '<p class="messaje">' . $_SESSION['messaje'] . '</p>';
                 unset($_SESSION['messaje']);
-            } 
-          ?>
+            }
+            ?>
             <hr>
             <p class="txt">
                 ¿QUÉ QUIERES HACER HOY?
@@ -157,64 +158,10 @@ if (!isset($_SESSION['id_usuario']) || $_SESSION['rol'] != 2) {
             <a onclick="mostrarAlerta(event)" href="#" id="ser-mototaxista">Quiero Ser Mototaxista</a>
         </div>
     </div>
-    <!--permite que el usuario pueda registrar sus documentos solo una vez-->
-    <script>
-        document.addEventListener('DOMContentLoaded', function() {
-            // Obtener el ID del usuario desde PHP
-            var userId = "<?php echo $user_id; ?>";
-            var mensajeKey = 'mensajeVisto_' + userId;
-
-            // Función para mostrar la alerta y redirigir al formulario
-            function mostrarAlerta(event) {
-                event.preventDefault(); // Prevenir el comportamiento por defecto del enlace
-
-                console.log('Iniciando función mostrarAlerta');
-                console.log('ID de usuario:', userId);
-                console.log('Clave de mensaje en localStorage:', mensajeKey);
-
-                // Verificar si el usuario ya ha visto el mensaje
-                var mensajeVisto = localStorage.getItem(mensajeKey);
-                console.log('Valor de mensajeVisto en localStorage:', mensajeVisto);
-
-                if (mensajeVisto !== 'true') {
-                    console.log('El mensaje no ha sido visto. Mostrando confirmación.');
-                    var respuesta = confirm("Para nosotros es de gran importancia conocer con qué documentos de tu vehículo cuentas, ya que estos son solicitados por las autoridades de tránsito. Por esta razón, te invitamos a llenar el siguiente formulario para que puedas prestar el servicio de mototaxi.");
-                    console.log('Confirmación de usuario:', respuesta);
-
-                    if (respuesta) {
-                        // Marcar que el usuario ya ha visto el mensaje
-                        localStorage.setItem(mensajeKey, 'true');
-                        console.log('Mensaje marcado como visto en localStorage');
-
-                        // Redirigir al formulario
-                        window.location.href = '/documentos/registro_de_documentos.php';
-                    } else {
-                        console.log('Usuario canceló la confirmación.');
-                    }
-                } else {
-                    console.log('El mensaje ya ha sido visto. Redirigiendo a sermototaxista.php');
-                    // Si el mensaje ya fue visto, redirigir directamente a la otra página
-                    window.location.href = '/php/sermototaxista.php';
-                }
-            }
-
-            // Asignar la función al enlace
-            document.getElementById('ser-mototaxista').onclick = mostrarAlerta;
-        });
-    </script>
-       <script>
-        document.addEventListener('DOMContentLoaded', function() {
-            var mensajeDiv = document.getElementById('mensaje-solicitante');
-            if (mensajeDiv) {
-                setTimeout(function() {
-                    mensajeDiv.style.display = 'none';
-                }, 5000); // 5000 milisegundos = 5 segundos
-            }
-        });
-    </script>
 
     <script type="module" src="https://unpkg.com/ionicons@7.1.0/dist/ionicons/ionicons.esm.js"></script>
-    <script nomodule src="https://unpkg.com/ionicons@7.1.0/dist/ionicons/ionicons.js"></script>
+    </script type="module" src="https://unpkg.com/ionicons@7.1.0/dist/ionicons/ionicons.js"></scriptnomodule>
+    <script src="/php/js/funcionalidad.js"></script>
     <script src="/php/js/script.js"></script>
 
 </body>

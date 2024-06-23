@@ -16,33 +16,7 @@ include_once "/xampp/htdocs/prueba/conexion/conexion.php"; // Asegúrate de que 
 $id_usuario = $_SESSION['id_usuario']; // Obtener el ID del usuario
 
 // Consulta para obtener los datos del perfil del usuario y los documentos asociados
-$query = "SELECT 
-            u.id_usuarios, 
-            u.Nombres, 
-            u.Apellidos, 
-            u.DNI, 
-            u.fecha_de_nacimiento, 
-            u.telefono, 
-            u.Departamento, 
-            u.Ciudad, 
-            u.Direccion, 
-            u.Usuario, 
-            u.Password,
-            u.Estado, 
-            u.rol,
-            d.id_documentos,
-            d.licencia_de_conducir,
-            d.tarjeta_de_propiedad,
-            d.soat,
-            d.tecno_mecanica,
-            d.placa,
-            d.marca,
-            d.modelo,
-            d.color
-          FROM usuarios u
-          LEFT JOIN documentos d ON u.id_usuarios = d.id_usuarios
-          WHERE u.id_usuarios = ?";
-
+$query = "SELECT *FROM usuarios";
 // Preparar la consulta
 $stmt = $conexion->prepare($query);
 
@@ -50,8 +24,7 @@ if (!$stmt) {
     die('Error al preparar la consulta: ' . $conexion->error);
 }
 
-// Vincular parámetros
-$stmt->bind_param("i", $id_usuario);
+;
 
 // Ejecutar la consulta
 $stmt->execute();
@@ -92,20 +65,6 @@ $stmt->close();
     <p><strong>Usuario:</strong> <?php echo $perfil_usuario['Usuario']; ?></p>
     <p><strong>Contraseña:</strong> *********</p>
     <p><strong>Estado:</strong> <?php echo $perfil_usuario['Estado']; ?></p>
-
-    <h2>Documentos</h2>
-    <?php if ($perfil_usuario['id_usuarios'] != null): ?>
-        <p><strong>Licencia de Conducir:</strong> <?php echo $perfil_usuario['licencia_de_conducir']; ?></p>
-        <p><strong>Tarjeta de Propiedad:</strong> <?php echo $perfil_usuario['tarjeta_de_propiedad']; ?></p>
-        <p><strong>SOAT:</strong> <?php echo $perfil_usuario['soat']; ?></p>
-        <p><strong>Tecno Mecánica:</strong> <?php echo $perfil_usuario['tecno_mecanica']; ?></p>
-        <p><strong>Placa:</strong> <?php echo $perfil_usuario['placa']; ?></p>
-        <p><strong>Marca:</strong> <?php echo $perfil_usuario['marca']; ?></p>
-        <p><strong>Modelo:</strong> <?php echo $perfil_usuario['modelo']; ?></p>
-        <p><strong>Color:</strong> <?php echo $perfil_usuario['color']; ?></p>
-    <?php else: ?>
-        <p>No se han subido documentos.</p>
-    <?php endif; ?>
 
     <br>
     <a href="/php/inicio.php" class="btn btn-regresar">Regresar</a> <!-- Enlace para regresar -->
