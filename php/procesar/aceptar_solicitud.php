@@ -5,20 +5,20 @@ include "/xampp/htdocs/prueba/conexion/conexion.php";
 // Verificar si el usuario está autenticado
 $validar = $_SESSION['usuario'];
 
-if ($validar == null || $validar == '') {
+if (empty($validar)) {
     header("Location: ../../../login/login.php");
-    die();
+    exit();
 }
 
 // Verificar si se ha proporcionado el ID de usuario y de solicitud
 if (!isset($_GET['id_usuario']) || empty($_GET['id_usuario']) || !isset($_GET['id_solicitud']) || empty($_GET['id_solicitud'])) {
     $_SESSION['error_message'] = "No se ha proporcionado el ID de usuario o de la solicitud.";
-    header("Location: ../sermototaxista.php"); // Redirigir a la página de solicitudes
-    exit;
+    header("Location: ../sermototaxista.php");
+    exit();
 }
 
-$id_usuario = $_GET['id_usuario'];
-$id_solicitud = $_GET['id_solicitud'];
+$id_usuario = intval($_GET['id_usuario']); // Convertir a entero para seguridad
+$id_solicitud = intval($_GET['id_solicitud']); // Convertir a entero para seguridad
 
 // Actualizar el estado de la solicitud a 'aceptada'
 $sql_update = "UPDATE solicitudes SET estado='aceptada' WHERE id_solicitud=? AND id_usuarios=?";
@@ -34,16 +34,15 @@ if ($stmt->execute()) {
     $stmt_insert->execute();
     $stmt_insert->close();
 
-    // Mensaje de éxito para el usuario que aceptó la solicitud
     $_SESSION['success_message'] = "Solicitud aceptada correctamente y notificación enviada al solicitante.";
-    header("Location: ../sermototaxista.php"); // Redirigir a la página de solicitudes
-    exit;
 } else {
     $_SESSION['error_message'] = "Error al aceptar la solicitud: " . $conexion->error;
-    header("Location: ../sermototaxista.php"); // Redirigir a la página de solicitudes
-    exit;
 }
 
 $stmt->close();
 $conexion->close();
+
+// Redirigir a la página de solicitudes
+header("Location: ../sermototaxista.php");
+exit();
 ?>

@@ -19,9 +19,6 @@ $user_id = $_SESSION['id_usuario'];
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="/php/css/sermototaxista.css"> <!-- Enlace a estilos CSS -->
-    <style>
-      
-    </style>
     <title>Aceptar servicio</title>
 </head>
 <body>
@@ -29,8 +26,8 @@ $user_id = $_SESSION['id_usuario'];
     <div class="contenedor">
         <form id="verSolicitudes" action="/php/procesar/aceptar_solicitud.php" method="post">
         <a href="/php/inicio.php?id_usuario=<?php echo $_SESSION['id_usuario']; ?>&uid=<?php echo uniqid(); ?>">
-    <img src="/php/css/imagenes/images.png" alt="" class="retroceder">
-</a>
+            <img src="/php/css/imagenes/images.png" alt="" class="retroceder">
+        </a>
         <h1>Solicitudes Por aceptar</h1><br>
             <?php
             if (isset($_SESSION['success_message'])) {
@@ -62,8 +59,11 @@ $user_id = $_SESSION['id_usuario'];
                 $offset = ($page - 1) * $limit;
 
                 // Obtener el número total de registros
-                $sql = "SELECT COUNT(*) as total FROM solicitudes";
-                $result = $conexion->query($sql);
+                $sql = "SELECT COUNT(*) as total FROM solicitudes WHERE id_usuarios != ?";
+                $stmt = $conexion->prepare($sql);
+                $stmt->bind_param("i", $user_id);
+                $stmt->execute();
+                $result = $stmt->get_result();
 
                 if (!$result) {
                     die("Error al obtener el número total de registros: " . $conexion->error);
@@ -72,12 +72,16 @@ $user_id = $_SESSION['id_usuario'];
                 $total_records = $result->fetch_assoc()['total'];
                 $total_pages = ceil($total_records / $limit);
 
-                // Obtener los registros para la página actual, incluyendo datos de usuarios
+                // Obtener los registros para la página actual, excluyendo las solicitudes del usuario en sesión
                 $sql = "SELECT s.*, u.Nombres, u.Apellidos
                         FROM solicitudes s
                         INNER JOIN usuarios u ON s.id_usuarios = u.id_usuarios
-                        LIMIT $offset, $limit";
-                $result = $conexion->query($sql);
+                        WHERE s.id_usuarios != ?
+                        LIMIT ?, ?";
+                $stmt = $conexion->prepare($sql);
+                $stmt->bind_param("iii", $user_id, $offset, $limit);
+                $stmt->execute();
+                $result = $stmt->get_result();
 
                 if (!$result) {
                     die("Error al obtener las solicitudes: " . $conexion->error);
@@ -87,7 +91,7 @@ $user_id = $_SESSION['id_usuario'];
                     while ($row = $result->fetch_assoc()) {
                         echo "<div class='solicitud'>
                                 <h3>{$row['Nombres']}</h3>
-                                 <h3>{$row['Apellidos']}</h3>
+                                <h3>{$row['Apellidos']}</h3>
                                 <p><strong>Origen:</strong> {$row['origen']}</p>
                                 <p><strong>Destino:</strong> {$row['destino']}</p>
                                 <p><strong>Cantidad Personas:</strong> {$row['cantidad_personas']}</p>
