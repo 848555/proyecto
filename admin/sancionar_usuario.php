@@ -2,45 +2,48 @@
 session_start();
 include("/xampp/htdocs/prueba/conexion/conexion.php");
 
-if (isset($_GET['id_retencion'])) {
-    $id_retencion = intval($_GET['id_retencion']); // ID de la retención
+if (isset($_GET['id_retencion']) && isset($_GET['id_usuario'])) {
+    $id_retencion = intval($_GET['id_retencion']);
+    $id_usuario = intval($_GET['id_usuario']);
 
-    // Consulta preparada para obtener el ID de usuario desde la tabla de retenciones
-    $query = "SELECT id_usuarios FROM retenciones WHERE id = ?";
-    $stmt = $conexion->prepare($query);
-    $stmt->bind_param("i", $id_retencion);
-
-    if ($stmt->execute()) {
-        $stmt->bind_result($id_usuario);
-        $stmt->fetch();
-        $stmt->close();
-
-        // Consulta preparada para sancionar al usuario específico
-        $query_sancion = "UPDATE usuarios SET Estado = 'Sancionado' WHERE id_usuarios = ?";
-        $stmt_sancion = $conexion->prepare($query_sancion);
-        $stmt_sancion->bind_param("i", $id_usuario);
-
-        // Ejecutar la consulta y verificar si fue exitosa
-        if ($stmt_sancion->execute()) {
-            $_SESSION['mensaje'] = "Usuario sancionado correctamente.";
-        } else {
-            $_SESSION['mensaje'] = "Error al sancionar al usuario.";
-        }
-
-        // Cerrar la consulta
-        $stmt_sancion->close();
-    } else {
-        $_SESSION['mensaje'] = "Error al obtener el ID de usuario desde la tabla de retenciones.";
+    // Validar que los valores sean válidos
+    if ($id_retencion <= 0 || $id_usuario <= 0) {
+        $_SESSION['mensaje'] = "Los parámetros id_retencion e id_usuario deben ser números positivos.";
+        header("Location: ver_retenciones.php");
+        exit();
     }
 
+    // Verificar si la retención existe para ese usuario
+    $query_check = "SELECT * FROM retenciones WHERE id = ? AND id_usuarios = ?";
+    $stmt_check = $conexion->prepare($query_check);
+    $stmt_check->bind_param("ii", $id_retencion, $id_usuario);
+    $stmt_check->execute();
+    $result_check = $stmt_check->get_result();
+
+    if ($result_check->num_rows > 0) {
+        // Actualizar estado del usuario a 'Sancionado'
+        $query_update = "UPDATE usuarios SET Estado = 'Sancionado' WHERE id_usuarios = ?";
+        $stmt_update = $conexion->prepare($query_update);
+        $stmt_update->bind_param("i", $id_usuario);
+
+        if ($stmt_update->execute()) {
+            $_SESSION['mensaje'] = "El usuario con ID $id_usuario ha sido sancionado correctamente.";
+        } else {
+            $_SESSION['mensaje'] = "Error al sancionar al usuario con ID $id_usuario: " . $stmt_update->error;
+        }
+
+        $stmt_update->close();
+    } else {
+        $_SESSION['mensaje'] = "No se encontró la retención correspondiente para la retención ID $id_retencion y usuario ID $id_usuario.";
+    }
+
+    $stmt_check->close();
 } else {
-    $_SESSION['mensaje'] = "ID de retención no proporcionado.";
+    $_SESSION['mensaje'] = "Faltan parámetros necesarios para sancionar al usuario.";
 }
 
-// Cerrar la conexión
 $conexion->close();
 
-// Redirigir a la página de retenciones
 header("Location: ver_retenciones.php");
 exit();
 ?>

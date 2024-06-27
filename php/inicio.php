@@ -192,12 +192,10 @@ if (!isset($_SESSION['id_usuario']) || $_SESSION['rol'] != 2) {
         <div class="info">
 
             <h2>Bienvenido <?php echo $_SESSION['usuario']; ?></h2>
-            <?php
-            if (isset($_SESSION['messaje'])) {
-                echo '<p class="messaje">' . $_SESSION['messaje'] . '</p>';
-                unset($_SESSION['messaje']);
-            }
-            ?>
+           <?php if (isset($_SESSION['mensaje'])) {
+                        echo '<p class="mensaje">' . $_SESSION['mensaje'] . '</p>';
+                        unset($_SESSION['mensaje']);
+                    }?>
             <hr>
             <p class="txt">
                 ¿QUÉ QUIERES HACER HOY?

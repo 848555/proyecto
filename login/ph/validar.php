@@ -9,9 +9,6 @@ if (isset($_POST['usuario']) && isset($_POST['password'])) {
     $usuario = $_POST['usuario'];
     $password = $_POST['password'];
 
-    // Imprimir valores de depuración
-   // echo "Usuario: $usuario, Password: $password<br>";
-
     // Preparar y ejecutar la consulta SQL de forma segura para prevenir inyecciones SQL
     $consulta = "SELECT * FROM usuarios WHERE Usuario=? AND Password=?";
     $stmt = mysqli_prepare($conexion, $consulta);
@@ -36,22 +33,32 @@ if (isset($_POST['usuario']) && isset($_POST['password'])) {
 
     // Verificar el resultado de la consulta
     if ($filas) {
-        // Imprimir valores de depuración
-        //echo "Usuario encontrado: " . $filas['Usuario'] . ", Rol: " . $filas['rol'] . "<br>";
+        // Verificar el estado del usuario
+        $estado_usuario = $filas['Estado'];
 
-  
+        if ($estado_usuario == 'Sancionado') {
+            $_SESSION['error'] = "El usuario está sancionado y no puede iniciar sesión.";
+            header('Location: ../login.php');
+            exit();
+        } 
+         elseif ($estado_usuario == 'Inactivo') {
+            $_SESSION['error'] = "El usuario está inactivo y no puede iniciar sesión.";
+            header('Location: ../login.php');
+            exit();
+        }
+
         // Guardar datos en la sesión
         $_SESSION['usuario'] = $usuario;
         $_SESSION['id_usuario'] = $filas['id_usuarios'];
         $_SESSION['rol'] = $filas['rol'];
 
-        // Verificar el rol del usuario y redirigir en consecuencia
+        // Redirigir según el rol del usuario
         if ($filas['rol'] == 1) { // administrador
             header('Location: ../../../../admin/index.php');
             exit();
         } elseif ($filas['rol'] == 2) { // usuario
+            $_SESSION['mensaje'] = "¡Inicio de sesión exitoso!";
             header('Location: ../../../../php/inicio.php');
-            $_SESSION['messaje'] = "Iniciaste sesion correctamente.";
             exit();
         }
     } else {

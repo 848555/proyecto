@@ -20,6 +20,23 @@ if (empty($nombres) || empty($apellidos) || empty($dni) || empty($fecha) || empt
     header("Location: ../login.php");
     exit();
 }
+// Validar el número de teléfono (debe tener exactamente 10 dígitos)
+if (!preg_match('/^\d{10}$/', $telefono)) {
+    $_SESSION['error'] = "Error: El número de teléfono debe tener exactamente 10 dígitos.";
+    header("Location: ../login.php");
+    exit();
+}
+
+// Validar que la fecha indique que la persona es mayor de edad (18 años o más)
+$fecha_actual = new DateTime();
+$fecha_nacimiento = DateTime::createFromFormat('Y-m-d', $fecha);
+$edad = $fecha_nacimiento->diff($fecha_actual)->y;
+
+if ($edad < 18) {
+    $_SESSION['error'] = "Error: Debes ser mayor de edad para registrarte.";
+    header("Location: ../login.php");
+    exit();
+}
 
 // Verificar duplicados
 $check_sql = $conexion->prepare("SELECT * FROM usuarios WHERE DNI = ? OR telefono = ? OR Usuario = ?");

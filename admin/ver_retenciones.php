@@ -1,6 +1,30 @@
 <?php
 session_start();
+include("/xampp/htdocs/prueba/conexion/conexion.php");
+
+// Preparar consulta SQL para obtener retenciones agrupadas por usuario
+$query = "
+    SELECT 
+        retenciones.id,
+        retenciones.id_usuarios,
+        usuarios.Nombres,
+        usuarios.Apellidos,
+        usuarios.Estado,
+        GROUP_CONCAT(retenciones.id_solicitud SEPARATOR ', ') AS id_solicitudes,
+        SUM(retenciones.retencion) AS total_retencion,
+        MAX(retenciones.fecha) AS fecha_ultima_retencion,
+        MAX(retenciones.pagado) AS pagado
+    FROM 
+        retenciones
+    INNER JOIN 
+        usuarios ON retenciones.id_usuarios = usuarios.id_usuarios
+    GROUP BY 
+        retenciones.id_usuarios
+";
+$sql = $conexion->query($query);
+
 ?>
+
 <!DOCTYPE html>
 <html lang="en">
 
@@ -57,9 +81,9 @@ session_start();
                         <th scope="col">ID Usuario</th>
                         <th scope="col">Nombres</th>
                         <th scope="col">Apellidos</th>
-                        <th scope="col">ID Solicitud</th>
-                        <th scope="col">Retención</th>
-                        <th scope="col">Fecha</th>
+                        <th scope="col">ID Solicitud(es)</th>
+                        <th scope="col">Total Retención</th>
+                        <th scope="col">Fecha Última Retención</th>
                         <th scope="col">Pagado</th>
                         <th scope="col">Estado</th>
                         <th scope="col">Acciones</th>
@@ -67,27 +91,7 @@ session_start();
                 </thead>
                 <tbody>
                     <?php
-                    include("/xampp/htdocs/prueba/conexion/conexion.php");
-                    $sql = $conexion->query("
-                        SELECT 
-                            retenciones.id,
-                            retenciones.id_usuarios,
-                            usuarios.Nombres,
-                            usuarios.Apellidos,
-                            usuarios.Estado,
-                            retenciones.id_solicitud,
-                            retenciones.retencion,
-                            retenciones.fecha,
-                            retenciones.pagado
-                        FROM 
-                            retenciones
-                        INNER JOIN 
-                            usuarios ON retenciones.id_usuarios = usuarios.id_usuarios
-                        INNER JOIN 
-                            solicitudes ON retenciones.id_solicitud = solicitudes.id_solicitud
-                    ");
-
-                    if ($sql->num_rows > 0) {
+                    if ($sql && $sql->num_rows > 0) {
                         while ($datos = $sql->fetch_object()) {
                     ?>
                             <tr>
@@ -95,16 +99,16 @@ session_start();
                                 <td><?= $datos->id_usuarios ?></td>
                                 <td><?= $datos->Nombres ?></td>
                                 <td><?= $datos->Apellidos ?></td>
-                                <td><?= $datos->id_solicitud ?></td>
-                                <td><?= $datos->retencion ?></td>
-                                <td><?= $datos->fecha ?></td>
+                                <td><?= $datos->id_solicitudes ?></td>
+                                <td><?= $datos->total_retencion ?></td>
+                                <td><?= $datos->fecha_ultima_retencion ?></td>
                                 <td><?= $datos->pagado ? 'Sí' : 'No' ?></td>
                                 <td><?= $datos->Estado ?></td>
                                 <td>
                                     <a onclick="return eliminar()" href="/admin/eliminar_retencion.php?id=<?= $datos->id ?>" class="btn btn-small btn-danger"><i class="fa-solid fa-trash"></i></a>
                                     <?php if (!$datos->pagado) { ?>
-                                        <a onclick="return sancionar()" href="/admin/sancionar_usuario.php?id_usuarios=<?= $datos->id_usuarios ?>" class="btn btn-small btn-warning"><i class="fa-solid fa-exclamation-triangle"></i></a>
-                                        <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#editarEstadoModal<?= $datos->id?>">Editar Estado</button>
+                                        <a onclick="return sancionar()" href="/admin/sancionar_usuario.php?id_usuario=<?= $datos->id_usuarios ?>&id_retencion=<?= $datos->id ?>" class="btn btn-small btn-warning"><i class="fa-solid fa-exclamation-triangle"></i> Sancionar</a>
+                                        <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#editarEstadoModal<?= $datos->id ?>">Editar Estado</button>
                                     <?php } ?>
                                 </td>
                             </tr>
@@ -123,7 +127,6 @@ session_start();
                                                 <label for="estadoUsuario" class="form-label">Nuevo Estado:</label>
                                                 <select class="form-select" id="estadoUsuario" name="estadoUsuario">
                                                     <option value="activo">Activo</option>
-                                                    <option value="suspendido">Suspendido</option>
                                                     <option value="inactivo">Inactivo</option>
                                                 </select>
                                                 <div class="modal-footer">
@@ -138,7 +141,12 @@ session_start();
                     <?php
                         }
                     } else {
-                        echo '<tr><td colspan="9" class="text-center">No hay retenciones registradas</td></tr>';
+                        echo '<tr><td colspan="10" class="text-center">No hay retenciones registradas</td></tr>';
+                    }
+                    // Mostrar mensaje si existe
+                    if (isset($_SESSION['mensaje'])) {
+                        echo '<script>alert("' . $_SESSION['mensaje'] . '");</script>';
+                        unset($_SESSION['mensaje']);
                     }
                     ?>
                 </tbody>

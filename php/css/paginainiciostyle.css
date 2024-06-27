@@ -404,22 +404,19 @@ main.min-main{
   margin-left: 80px;
 }
 
-.messaje{
-  color: rgb(12, 212, 102);
-}
-.alert-message {
-  padding: 15px;
-  margin-bottom: 20px;
-  border: 1px solid transparent;
-  border-radius: 4px;
-  margin-top: 90px;
-}
-
-.alert-message-success {
+.mensaje {
   color: rgb(12, 212, 102);
   background-color: #dff0d8;
-  border-color: #d6e9c6;
+  padding: 1px;
+  margin-bottom: 1px;
+  border: 1px solid #d6e9c6;
+  border-radius: 1px;
+  -webkit-border-radius: 1px;
+  -moz-border-radius: 1px;
+  -ms-border-radius: 1px;
+  -o-border-radius: 1px;
 }
+
 
 /* Estilos para el modal */
 .modal {
