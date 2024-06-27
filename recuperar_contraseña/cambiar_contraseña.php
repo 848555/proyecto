@@ -18,21 +18,25 @@ $user_id = $_SESSION['id_usuario'];
     <div class="container">
         <h1>Cambiar contraseña</h1>
         <?php
+        if (isset($_SESSION['mensaje'])) {
+            echo '<p class="mensaje">' . $_SESSION['mensaje'] . '</p>';
+            unset($_SESSION['mensaje']);
+        }
         if (isset($_SESSION['error'])) {
             echo '<p class="error">' . $_SESSION['error'] . '</p>';
             unset($_SESSION['error']);
         }
         ?>
-        <form id="cambiarContraseñaForm" action="/recuperar_contraseña/procesar/cambiar_contraseña.php" method="POST" onsubmit="return validarContraseñas()">
+        <form id="cambiarContraseñaForm" action="/recuperar_contraseña/procesar/cambiar_contraseña_usuario.php" method="POST" onsubmit="return validarContraseñas()">
             <input type="hidden" id="id_usuario" name="id_usuario" value="<?php echo $user_id; ?>">
             <div class="password-container">
                 <label for="nueva_contraseña">Ingresa la contraseña nueva</label>
-                <input type="password" id="nueva_contraseña" name="nueva_contraseña" placeholder="Nueva contraseña" required>
+                <input type="password" id="nueva_contraseña" name="nueva_contraseña" placeholder="Nueva contraseña" >
                 <i class="fas fa-eye toggle-password" onclick="togglePasswordVisibility('nueva_contraseña')"></i>
             </div> <br>
             <div class="password-container">
                 <label for="verificar_contraseña">Verificar nueva contraseña</label>
-                <input type="password" id="verificar_contraseña" name="verificar_contraseña" placeholder="Verificar nueva contraseña" required>
+                <input type="password" id="verificar_contraseña" name="verificar_contraseña" placeholder="Verificar nueva contraseña" >
                 <i class="fas fa-eye toggle-password" onclick="togglePasswordVisibility('verificar_contraseña')"></i>
             </div>
             <p id="errorMensaje" class="error"></p>

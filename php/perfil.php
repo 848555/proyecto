@@ -66,7 +66,7 @@ $stmt->close();
             <br>
             <a href="/php/inicio.php" class="btn btn-regresar">Regresar</a>
             <a href="#" class="btn btn-editar">Editar</a>
-        <?php else: ?>
+            <?php else: ?>
             <p>No se encontraron datos de perfil para el usuario.</p>
         <?php endif; ?>
     </div>

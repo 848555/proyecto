@@ -8,7 +8,7 @@ $user_id = $_SESSION['id_usuario'];
 // Verificar si el usuario tiene acceso al contenido de esta página
 if (!isset($_SESSION['id_usuario']) || $_SESSION['rol'] != 2) {
     // Redireccionar a la página de inicio de sesión si no hay sesión iniciada o el rol no es correcto
-    header("Location: login.php");
+    header("Location: ../../../login/login.php");
     exit;
 }
 ?>
@@ -141,13 +141,19 @@ if (!isset($_SESSION['id_usuario']) || $_SESSION['rol'] != 2) {
                     <input type="text" id="numeroNequi" name="numeroNequi" required>
                     <button type="submit">Pagar con Nequi</button>
                 </form>
-               
+                <li>
+                    <a href="/php/ayuda.php">
+                    <ion-icon name="help-circle-outline"></ion-icon>
+                        <span>Centro de ayuda</span>
+                    </a>
+                </li>
                 <li>
                     <a href="/login/login.php?vista=logout">
                         <ion-icon name="power-outline"></ion-icon>
                         <span>Salir</span>
                     </a>
                 </li>
+                
 
 
             </ul>

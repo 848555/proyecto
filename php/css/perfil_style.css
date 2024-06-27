@@ -41,10 +41,14 @@ p strong {
   color: #ffffff;
   background-color: #007bff;
   border: none;
-  border-radius: 5px;
+  border-radius: 9px;
   text-decoration: none;
   font-size: 14px;
   transition: background-color 0.3s ease;
+  -webkit-border-radius: 9px;
+  -moz-border-radius: 9px;
+  -ms-border-radius: 9px;
+  -o-border-radius: 9px;
 }
 
 .btn:hover {
@@ -71,7 +75,7 @@ p strong {
   }
 
   .btn {
-      width: 100%;
+      width: 90%;
       margin: 5px 0;
       text-align: center;
   }

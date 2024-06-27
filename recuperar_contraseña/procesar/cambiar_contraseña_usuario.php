@@ -7,12 +7,20 @@ if (!isset($_SESSION['id_usuario'])) {
     die("Acceso no autorizado");
 }
 
-// Definir la variable $user_id desde la sesión
+// Definir el ID de usuario desde la sesión
 $user_id = $_SESSION['id_usuario'];
 
-// Verificar el método de solicitud
+// Verificar el método de solicitud y validar campos
 if ($_SERVER['REQUEST_METHOD'] == 'POST') {
-    $nueva_contraseña = $_POST['nueva_contraseña'];
+    // Verificar que el campo nueva_contraseña no esté vacío
+    if (empty($_POST['nueva_contraseña'])) {
+        $_SESSION['error'] = "El campo de nueva contraseña no puede estar vacío.";
+        header("location:../cambiar_contraseña.php");
+        exit();
+    }
+
+    // Obtener y limpiar la nueva contraseña
+    $nueva_contraseña = trim($_POST['nueva_contraseña']);
 
     // Preparar la declaración SQL para evitar inyección SQL
     $stmt = $conexion->prepare("UPDATE usuarios SET Password = ? WHERE id_usuarios = ?");
@@ -22,12 +30,12 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     if ($stmt->execute()) {
         // Contraseña actualizada exitosamente
         $_SESSION['mensaje'] = "Contraseña actualizada exitosamente.";
-        header("location:../../../../login/login.php");
+        header("location:../cambiar_contraseña.php");
         exit();
     } else {
         // Error al actualizar la contraseña
         $_SESSION['error'] = "Error al actualizar la contraseña: " . $stmt->error;
-        header("location:../../../../login/login.php");
+        header("location:cambiar_contraseña.php");
         exit();
     }
 
@@ -36,7 +44,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     $conexion->close();
 } else {
     // Si no es una solicitud POST, redireccionar de vuelta al formulario
-    header("location: ../../cambiar_contraseña.php");
+    header("location:../cambiar_contraseña.php");
     exit();
 }
 ?>

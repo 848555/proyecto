@@ -9,7 +9,7 @@
 <body>
     <div class="container">
         <h1>Recuperar contraseña</h1>
-        <form action="/php/procesar/recuperar_contraseña.php" method="POST">
+        <form action="/recuperar_contraseña/procesar/cambiar_contraseña.php" method="POST">
             <input type="tel" id="numero" name="numero" placeholder="Numero de Telefono" required>
             <button type="submit">Enviar</button> <br> <br>
             <a class="link1" href="/login/login.php">Regresar</a>

@@ -63,7 +63,7 @@ $stmt->close();
             
             <br>
             <a href="/php/inicio.php" class="btn btn-regresar">Regresar</a>
-            <a href="#" class="btn btn-editar">Editar</a>
+            <a href="/php/editar_documentos.php" class="btn btn-editar">Editar</a>
         <?php else: ?>
             <p>Lo siento no se encontraron documentos para mostrar, no has subido documentos.</p>
         <?php endif; ?>
