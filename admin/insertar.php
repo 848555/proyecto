@@ -94,7 +94,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         $conexion->close();
 
         // Redirigir al usuario de vuelta a la página principal
-        header("location: index.php");
+        header("location: index_princpal.php");
         exit();
     }
 }

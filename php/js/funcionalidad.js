@@ -1,28 +1,36 @@
+var modal = document.getElementById('mensajeModal');
+var openModalBtn = document.getElementById('openModalBtn');
+var closeModal = document.getElementsByClassName('close')[0];
+var mensajesContainer = document.getElementById('mensajesContainer');
 
-    var modal = document.getElementById('mensajeModal');
-    var openModalBtn = document.getElementById('openModalBtn');
-    var closeModal = document.getElementsByClassName('close')[0];
-    var mensajesContainer = document.getElementById('mensajesContainer');
+// Función para marcar mensajes como leídos
+function marcarMensajesLeidos() {
+    // Implementación para marcar mensajes como leídos
+    var mensajes = document.querySelectorAll('.mensaje');
+    mensajes.forEach(function(mensaje) {
+        mensaje.classList.add('leido');
+    });
+}
 
-    openModalBtn.onclick = function() {
-        // Cargar mensajes utilizando AJAX
-        var xhr = new XMLHttpRequest();
-        xhr.onreadystatechange = function() {
-            if (xhr.readyState === XMLHttpRequest.DONE) {
-                if (xhr.status === 200) {
-                    mensajesContainer.innerHTML = xhr.responseText;
-                    modal.style.display = 'block';
-                    
-                    // Marcar mensajes como leídos al mostrarlos
-                    marcarMensajesLeidos();
-                } else {
-                    alert('Hubo un problema al cargar los mensajes.');
-                }
+openModalBtn.onclick = function() {
+    // Cargar mensajes utilizando AJAX
+    var xhr = new XMLHttpRequest();
+    xhr.onreadystatechange = function() {
+        if (xhr.readyState === XMLHttpRequest.DONE) {
+            if (xhr.status === 200) {
+                mensajesContainer.innerHTML = xhr.responseText;
+                modal.style.display = 'block';
+                
+                // Llamar a la función para marcar mensajes como leídos
+                marcarMensajesLeidos();
+            } else {
+                alert('Hubo un problema al cargar los mensajes.');
             }
-        };
-        xhr.open('GET', '/php/procesar/mostrar_mensajes.php', true); 
-        xhr.send();
+        }
     };
+    xhr.open('GET', '/php/procesar/mostrar_mensajes.php', true); 
+    xhr.send();
+};
 
     closeModal.onclick = function() {
         modal.style.display = 'none';
@@ -142,3 +150,57 @@ setTimeout(function() {
         errorMessage.style.display = 'none';
     }
 }, 5000); // 5000 milisegundos = 5 segundos
+
+
+
+document.addEventListener('DOMContentLoaded', function() {
+    var modal = document.getElementById('modalPago');
+    var contenidoModal = document.getElementById('contenidoModal');
+    var spanCerrar = modal.querySelector('.close');
+
+    function abrirModal() {
+        modal.style.display = 'block';
+    }
+
+    function cerrarModal() {
+        modal.style.display = 'none';
+    }
+
+    spanCerrar.addEventListener('click', cerrarModal);
+
+    // Evento para abrir el modal al hacer clic en "Pagar servicios"
+    document.getElementById('pagaservicios').addEventListener('click', function(e) {
+        e.preventDefault();
+        contenidoModal.innerHTML = ''; // Limpiar contenido previo si es necesario
+
+        // Mostrar el formulario de Nequi en el modal
+        contenidoModal.innerHTML = '<form id="formularioNequi">' +
+            '<label for="numeroNequi">Número de cuenta Nequi:</label>' +
+            '<input type="text" id="numeroNequi" name="numeroNequi" required>' +
+            '<button type="button" id="btnPagarNequi">Pagar con Nequi</button>' +
+            '</form>';
+        abrirModal();
+    });
+
+    // Evento para manejar el pago con Nequi
+    document.getElementById('contenidoModal').addEventListener('click', function(e) {
+        if (e.target && e.target.id == 'btnPagarNequi') {
+            // Obtener el número de cuenta Nequi ingresado
+            var numeroNequi = document.getElementById('numeroNequi').value.trim();
+
+            // Validar el número de cuenta Nequi
+            if (numeroNequi.length < 10) {
+                alert('Por favor ingresa un número de cuenta Nequi válido.');
+                return;
+            }
+
+            // Construir la URL de redirección a Nequi (debes reemplazar con la URL correcta y los parámetros necesarios)
+            var urlNequi = 'https://www.nequi.com.co/?numero=' + encodeURIComponent(numeroNequi);
+
+            // Redirigir al usuario a Nequi
+            window.location.href = urlNequi;
+        }
+    });
+
+    
+});

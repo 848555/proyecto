@@ -32,7 +32,7 @@ $resultado = $conexion->query($sql);
                 <ul class="navbar-nav">
 
                     <li class="nav-item">
-                        <a class="nav-link" href="/admin/index.php">Inicio</a>
+                        <a class="nav-link" href="/admin/index_principal.php">Inicio</a>
                     </li>
 
                 </ul>

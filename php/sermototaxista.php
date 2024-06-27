@@ -1,6 +1,6 @@
 <?php 
-
 session_start();
+
 
 // Verificar si el usuario tiene acceso al contenido de esta página
 if (!isset($_SESSION['id_usuario']) || $_SESSION['rol'] != 2) {
@@ -10,7 +10,6 @@ if (!isset($_SESSION['id_usuario']) || $_SESSION['rol'] != 2) {
 }
 
 $user_id = $_SESSION['id_usuario'];
-
 ?>
 
 <!DOCTYPE html>
@@ -45,92 +44,13 @@ $user_id = $_SESSION['id_usuario'];
             ?>
             </div>
 
-            <div class="table-container">
-                <?php
-                include "/xampp/htdocs/prueba/conexion/conexion.php";
-
-                // Verificar la conexión
-                if ($conexion->connect_error) {
-                    die("La conexión falló: " . $conexion->connect_error);
-                }
-
-                $limit = 20; // Número de registros por página
-                $page = isset($_GET['page']) ? $_GET['page'] : 1;
-                $offset = ($page - 1) * $limit;
-
-                // Obtener el número total de registros
-                $sql = "SELECT COUNT(*) as total FROM solicitudes WHERE id_usuarios != ?";
-                $stmt = $conexion->prepare($sql);
-                $stmt->bind_param("i", $user_id);
-                $stmt->execute();
-                $result = $stmt->get_result();
-
-                if (!$result) {
-                    die("Error al obtener el número total de registros: " . $conexion->error);
-                }
-
-                $total_records = $result->fetch_assoc()['total'];
-                $total_pages = ceil($total_records / $limit);
-
-                // Obtener los registros para la página actual, excluyendo las solicitudes del usuario en sesión
-                $sql = "SELECT s.*, u.Nombres, u.Apellidos
-                        FROM solicitudes s
-                        INNER JOIN usuarios u ON s.id_usuarios = u.id_usuarios
-                        WHERE s.id_usuarios != ?
-                        LIMIT ?, ?";
-                $stmt = $conexion->prepare($sql);
-                $stmt->bind_param("iii", $user_id, $offset, $limit);
-                $stmt->execute();
-                $result = $stmt->get_result();
-
-                if (!$result) {
-                    die("Error al obtener las solicitudes: " . $conexion->error);
-                }
-
-                if ($result->num_rows > 0) {
-                    while ($row = $result->fetch_assoc()) {
-                        echo "<div class='solicitud'>
-                                <h3>{$row['Nombres']}</h3>
-                                <h3>{$row['Apellidos']}</h3>
-                                <p><strong>Origen:</strong> {$row['origen']}</p>
-                                <p><strong>Destino:</strong> {$row['destino']}</p>
-                                <p><strong>Cantidad Personas:</strong> {$row['cantidad_personas']}</p>
-                                <p><strong>Cantidad Motos:</strong> {$row['cantidad_motos']}</p>
-                                <p><strong>Método de Pago:</strong> {$row['metodo_pago']}</p>
-                                <p><a href='/php/procesar/aceptar_solicitud.php?id_solicitud={$row['id_solicitud']}&id_usuario={$row['id_usuarios']}'>Aceptar Solicitud</a></p>
-                              </div>";
-                    }
-                } else {
-                    echo "<p>No se encontraron registros.</p>";
-                }
-
-                $conexion->close();
-                ?>
+            <div class="table-container" id="solicitudes-container">
+                <!-- Aquí se cargarán las solicitudes -->
             </div>
 
             <!-- Mostrar enlaces de paginación -->
-            <div class="pagination">
-                <?php
-                if ($total_pages > 1) {
-                    $current_page = isset($_GET['page']) ? $_GET['page'] : 1;
-
-                    // Mostrar enlace "Anterior"
-                    if ($current_page > 1) {
-                        echo "<a class='page-link' href='/php/sermototaxista.php?page=" . ($current_page - 1) . "'>&laquo; Anterior</a>";
-                    }
-
-                    // Mostrar números de página
-                    for ($i = 1; $i <= $total_pages; $i++) {
-                        $active_class = ($current_page == $i) ? "active" : "";
-                        echo "<a class='page-link $active_class' href='/php/sermototaxista.php?page=$i'>$i</a>";
-                    }
-
-                    // Mostrar enlace "Siguiente"
-                    if ($current_page < $total_pages) {
-                        echo "<a class='page-link' href='/php/sermototaxista.php?page=" . ($current_page + 1) . "'>Siguiente &raquo;</a>";
-                    }
-                }
-                ?>
+            <div class="pagination" id="pagination">
+                <!-- Aquí se cargarán los enlaces de paginación -->
             </div>
 
         </form>
@@ -154,6 +74,59 @@ $user_id = $_SESSION['id_usuario'];
                     errorMessage.style.display = 'none';
                 }, 5000); // Ocultar después de 5 segundos
             }
+        });
+    </script>
+    <script>
+        function fetchSolicitudes(page = 1) {
+            const solicitudesContainer = document.getElementById('solicitudes-container');
+            const paginationContainer = document.getElementById('pagination');
+            
+            fetch(`/php/procesar/obtener_solicitudes.php?page=${page}`)
+                .then(response => response.json())
+                .then(data => {
+                    // Limpiar contenedor
+                    solicitudesContainer.innerHTML = '';
+                    
+                    // Verificar si hay datos
+                    if (data.solicitudes.length > 0) {
+                        data.solicitudes.forEach(row => {
+                            const solicitudDiv = document.createElement('div');
+                            solicitudDiv.classList.add('solicitud');
+                            solicitudDiv.innerHTML = `
+                                <h3>${row.Nombres}</h3>
+                                <h3>${row.Apellidos}</h3>
+                                <p><strong>Origen:</strong> ${row.origen}</p>
+                                <p><strong>Destino:</strong> ${row.destino}</p>
+                                <p><strong>Cantidad Personas:</strong> ${row.cantidad_personas}</p>
+                                <p><strong>Cantidad Motos:</strong> ${row.cantidad_motos}</p>
+                                <p><strong>Método de Pago:</strong> ${row.metodo_pago}</p>
+                                <p><a href='/php/procesar/aceptar_solicitud.php?id_solicitud=${row.id_solicitud}&id_usuario=${row.id_usuarios}'>Aceptar Solicitud</a></p>
+                            `;
+                            solicitudesContainer.appendChild(solicitudDiv);
+                        });
+                    } else {
+                        solicitudesContainer.innerHTML = '<p>No se encontraron registros.</p>';
+                    }
+                    
+                    // Actualizar paginación
+                    paginationContainer.innerHTML = '';
+                    if (data.total_pages > 1) {
+                        for (let i = 1; i <= data.total_pages; i++) {
+                            const pageLink = document.createElement('a');
+                            pageLink.classList.add('page-link');
+                            if (i === page) pageLink.classList.add('active');
+                            pageLink.href = `javascript:fetchSolicitudes(${i})`;
+                            pageLink.textContent = i;
+                            paginationContainer.appendChild(pageLink);
+                        }
+                    }
+                })
+                .catch(error => console.error('Error fetching solicitudes:', error));
+        }
+
+        document.addEventListener('DOMContentLoaded', function() {
+            fetchSolicitudes(); // Fetch initial solicitudes
+            setInterval(fetchSolicitudes, 5 * 60 * 1000); // Update every 5 minutes
         });
     </script>
 </body>

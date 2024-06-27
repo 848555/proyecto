@@ -55,7 +55,7 @@ if (isset($_SESSION['error'])) {
             <div class="collapse navbar-collapse" id="navbarNav">
                 <ul class="navbar-nav">
                     <li class="nav-item">
-                        <a class="nav-link active" aria-current="page" href="/admin/index.php">Inicio</a>
+                        <a class="nav-link active" aria-current="page" href="/admin/index_principal.php">Inicio</a>
                     </li>
                     <li class="nav-item">
                         <a class="nav-link" href="/login/login.php?vista=logout">Salir</a>

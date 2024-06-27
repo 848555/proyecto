@@ -16,10 +16,13 @@ $cantidad_personas = $_POST['personas'];
 $cantidad_motos = $_POST['cantidad'];
 $metodo_pago = $_POST['pago'];
 
-// Imprimir el contenido de $_POST para depurar
-echo "<pre>";
-print_r($_POST);
-echo "</pre>";
+// Definir la tarifa y la retención
+$tarifa = 4000; // Tarifa fija de 4000 pesos
+$retencion = 1000; // Retención de 1000 pesos por cada 4000
+
+// Calcular el costo total
+$costo_total = $cantidad_motos * $tarifa;
+$retencion_total = $cantidad_motos * $retencion;
 
 // Verificar si se recibieron los datos esperados
 if (empty($origen) || empty($destino) || empty($cantidad_personas) || empty($cantidad_motos) || empty($metodo_pago)) {
@@ -43,12 +46,12 @@ if ($result->num_rows > 0) {
 }
 
 // Insertar nueva solicitud
-$insertQuery = "INSERT INTO solicitudes (origen, destino, cantidad_personas, cantidad_motos, metodo_pago, estado, id_usuarios) VALUES (?, ?, ?, ?, ?, 'pendiente', ?)";
+$insertQuery = "INSERT INTO solicitudes (origen, destino, cantidad_personas, cantidad_motos, metodo_pago, estado, id_usuarios, costo_total, retencion_total) VALUES (?, ?, ?, ?, ?, 'pendiente', ?, ?, ?)";
 $stmt_insert = $conexion->prepare($insertQuery);
-$stmt_insert->bind_param("sssisi", $origen, $destino, $cantidad_personas, $cantidad_motos, $metodo_pago, $id_usuario);
+$stmt_insert->bind_param("sssisiid", $origen, $destino, $cantidad_personas, $cantidad_motos, $metodo_pago, $id_usuario, $costo_total, $retencion_total);
 
 if ($stmt_insert->execute()) {
-    $_SESSION['success_message'] = "Solicitud realizada con éxito.";
+    $_SESSION['success_message'] = "Solicitud realizada con éxito. Costo total: $costo_total. Retención total: $retencion_total.";
 } else {
     $_SESSION['error_message'] = "Hubo un error al realizar la solicitud. Por favor, inténtalo de nuevo.";
 }

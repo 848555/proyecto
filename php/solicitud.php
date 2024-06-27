@@ -58,7 +58,7 @@ $id_usuario = $_SESSION['id_usuario'];
         <label for="pago">Método de pago:</label>
         <select name="pago" id="pago" required>
             <option value="efectivo">Efectivo</option>
-            <option value="tarjeta">Tarjeta</option>
+            <option value="tarjeta">Nequi</option>
         </select>
         <a href="/php/inicio.php">Cancelar</a>
         <button >Solicitar Mototaxi</button>

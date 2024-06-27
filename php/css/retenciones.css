@@ -1,0 +1,97 @@
+/* Estilos generales */
+body {
+    font-family: 'Outfit', sans-serif;
+    background-color: aqua;
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    display: flex;
+    justify-content: center; /* Centra el contenido horizontalmente */
+    align-items: center; /* Centra el contenido verticalmente */
+    height: 100vh; /* Ocupa toda la altura del viewport */
+}
+
+.contenedor {
+    width: 90%;
+    max-width: 400px; /* Ajusta este valor según tus necesidades */
+    background: rgb(247, 248, 250);
+    border-radius: 30px;
+    line-height: 1.6;
+    padding: 20px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    text-align: center; /* Alinea el contenido al centro */
+}
+
+h1 {
+    color: rgb(12, 212, 102);
+    font-size: 24px;
+    margin-bottom: 20px;
+}
+
+p {
+    color: #333;
+    font-size: 16px;
+    margin-bottom: 10px;
+}
+
+form {
+    margin-top: 20px;
+}
+
+button {
+    background-color: rgb(12, 212, 102);
+    color: #fff;
+    border: none;
+    padding: 12px 24px; /* Aumenta el padding para hacer el botón más grande en móviles */
+    font-size: 18px;
+    cursor: pointer;
+    border-radius: 4px;
+}
+
+button:hover {
+    background-color: #0a8c5f;
+}
+
+.messaje {
+    color: rgb(12, 212, 102);
+    background-color: #dff0d8;
+    border: 1px solid transparent;
+    border-radius: 4px;
+    padding: 15px;
+    margin-bottom: 20px;
+}
+
+/* Estilos para dispositivos móviles */
+@media (max-width: 768px) {
+    .contenedor {
+        padding: 15px;
+    }
+
+    h1 {
+        font-size: 22px; /* Reducir un poco el tamaño del título en móviles */
+    }
+
+    p {
+        font-size: 14px;
+    }
+
+    button {
+        padding: 12px 20px; /* Ajustes adicionales para el botón en móviles */
+        font-size: 16px;
+    }
+}
+
+/* Estilos para la clase "regresar" */
+.regresar {
+    display: inline-block;
+    background-color: #333;
+    color: #fff;
+    text-decoration: none;
+    padding: 12px 24px; /* Ajustes para el enlace "regresar" en móviles */
+    border-radius: 4px;
+    margin-top: 20px;
+}
+
+.regresar:hover {
+    background-color: #555;
+}

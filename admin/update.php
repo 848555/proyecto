@@ -66,19 +66,20 @@ if ($resultado_select->num_rows > 0) {
 
         if ($resultado_update) {
             $_SESSION['success_message'] = "<p style='color: green;'>Usuario actualizado correctamente.</p>";
-            header("Location: ../../../admin/index.php");
+            header("Location: ../../../admin/index_principal.php");
+
             exit; // Asegurar que se detiene la ejecución después de redirigir
         } else {
             $_SESSION['error_message'] = "Error al actualizar el usuario: " . $conexion->error;
         }
     } else {
         // Si no hay campos para actualizar, redirigir directamente
-        header("Location: ../../../admin/index.php");
+        header("Location: ../../../admin/index_principal.php");
         exit; // Asegurar que se detiene la ejecución después de redirigir
     }
 } else {
     $_SESSION['error_message'] = "Usuario no encontrado.";
-    header("Location: ../../../admin/index.php");
+    header("Location: ../../../admin/index_principal.php");
     exit; // Asegurar que se detiene la ejecución después de redirigir
 }
 

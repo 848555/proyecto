@@ -25,12 +25,12 @@ if (!isset($_SESSION['id_usuario']) || $_SESSION['rol'] != 2) {
 
 <body>
     <?php
-// Verificar si hay un mensaje de error al eliminar la cuenta
-if (isset($_SESSION['error_message'])) {
-    echo '<div id="error-message" class="error-message">' . $_SESSION['error_message'] . '</div>';
-    unset($_SESSION['error_message']); // Limpiar el mensaje de error después de mostrarlo
-}
-?>
+    // Verificar si hay un mensaje de error al eliminar la cuenta
+    if (isset($_SESSION['error_message'])) {
+        echo '<div id="error-message" class="error-message">' . $_SESSION['error_message'] . '</div>';
+        unset($_SESSION['error_message']); // Limpiar el mensaje de error después de mostrarlo
+    }
+    ?>
 
     <div class="menu" id="menu">
         <ion-icon name="menu-outline" id="menuIcon"></ion-icon>
@@ -88,22 +88,22 @@ if (isset($_SESSION['error_message'])) {
                     </div>
                 </div>
 
-              <!-- Modal para eliminar cuenta -->
-<div id="eliminarCuentaModal" class="modal">
-    <div class="modal-content">
-        <span class="close">&times;</span>
-        <h2>Eliminar cuenta</h2>
-        <form method="POST" action="/php/procesar/eliminar_cuenta.php">
-            <ul class="modal-ul">
-                <li>
-                    <span class="mensa">Ingresa tu contraseña para eliminar</span> 
-                    <input class="password" type="password" name="password" id="passwordInput" required>
-                </li>
-                <li><button type="submit" id="confirmarEliminarBtn">Confirmar</button></li>
-            </ul>
-        </form>
-    </div>
-</div>
+                <!-- Modal para eliminar cuenta -->
+                <div id="eliminarCuentaModal" class="modal">
+                    <div class="modal-content">
+                        <span class="close">&times;</span>
+                        <h2>Eliminar cuenta</h2>
+                        <form method="POST" action="/php/procesar/eliminar_cuenta.php">
+                            <ul class="modal-ul">
+                                <li>
+                                    <span class="mensa">Ingresa tu contraseña para eliminar</span>
+                                    <input class="password" type="password" name="password" id="passwordInput" required>
+                                </li>
+                                <li><button type="submit" id="confirmarEliminarBtn">Confirmar</button></li>
+                            </ul>
+                        </form>
+                    </div>
+                </div>
 
 
                 <!-- Modal para mostrar políticas y privacidad -->
@@ -113,15 +113,48 @@ if (isset($_SESSION['error_message'])) {
                         <h2>Políticas y privacidad</h2>
                         <p>Aquí van las políticas y la información de privacidad.</p>
                     </div>
+                </div> <br> <br>
+
+                <!-- Modal pago -->
+                <div id="modalPago" class="modal">
+                    <div class="modal-content">
+                        <span class="close">&times;</span>
+                        <div id="contenidoModal"></div>
+                    </div>
                 </div>
 
+                <!-- Dropdown para seleccionar tipo de pago -->
+                <div class="dropdown">
+                    <span id="pagos" class="dropbtn">
+                        <ion-icon name="wallet-outline"></ion-icon>
+                        Pagos
+                    </span>
+                    <div class="dropdown-content">
+                        <a href="#" id="pagaservicios">Pagar servicios</a>
+                        <a href="/php/pagar_retenciones.php">Pagar tarifa</a>
+                        </div>
+                </div>
+
+                <!-- Formulario de Nequi -->
+                <form id="formularioNequi" style="display: none;">
+                    <label for="numeroNequi">Número de cuenta Nequi:</label>
+                    <input type="text" id="numeroNequi" name="numeroNequi" required>
+                    <button type="submit">Pagar con Nequi</button>
+                </form>
+               
                 <li>
                     <a href="/login/login.php?vista=logout">
                         <ion-icon name="power-outline"></ion-icon>
                         <span>Salir</span>
                     </a>
                 </li>
-            </ul> <br> <br> <br>
+
+
+            </ul>
+
+
+
+            <br> <br> <br>
             <div class="usuario">
                 <div class="info-usuario">
                     <div class="nombre">
@@ -130,6 +163,9 @@ if (isset($_SESSION['error_message'])) {
                     <ion-icon name="person-circle-outline"></ion-icon>
                 </div>
             </div>
+
+
+
 
         </nav>
 
