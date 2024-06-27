@@ -7,7 +7,7 @@ $validar = $_SESSION['usuario'];
 
 // Si el usuario no está autenticado, redirigir al formulario de inicio de sesión
 if ($validar == null || $validar == '') {
-    header("Location: ../../../login/login.php");
+    header("Location:../login/login.php");
     die();
 }
 ?>
@@ -40,6 +40,9 @@ if ($validar == null || $validar == '') {
                     <li class="nav-item">
                         <a class="nav-link" href="/admin/servicios_solicitados.php">Servicios solicitados</a>
                     </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="/admin/ver_retenciones.php">Retenciones</a>
+                    </li>
 
                     <li class="nav-item">
                         <a class="nav-link" href="/login/login.php?vista=logout">Salir</a>
@@ -66,17 +69,17 @@ if ($validar == null || $validar == '') {
         unset($_SESSION['success_message']); // Limpiar el mensaje después de mostrarlo
     }
     // Mostrar mensaje de confirmación
-if (isset($_SESSION['confirm_message'])) {
-    echo '<script>
+    if (isset($_SESSION['confirm_message'])) {
+        echo '<script>
             if (confirm("' . $_SESSION['confirm_message'] . '")) {
                 window.location.href = "eliminar.php?id=' . $_GET['id'] . '&confirm=1";
             } else {
                 window.location.href = "index.php";
             }
           </script>';
-    unset($_SESSION['confirm_message']); // Limpiar el mensaje después de mostrarlo
-}
-     
+        unset($_SESSION['confirm_message']); // Limpiar el mensaje después de mostrarlo
+    }
+
     ?>
 
     <div class="container-fluid"><br>
@@ -114,8 +117,23 @@ if (isset($_SESSION['confirm_message'])) {
 
                     <?php
                     include("/xampp/htdocs/prueba/conexion/conexion.php");
-                    $sql = $conexion->query("SELECT * from usuarios");
-
+                    $sql = $conexion->query("
+    SELECT u.id_usuarios,
+           u.nombres AS Nombres,
+           u.apellidos AS Apellidos,
+           u.DNI,
+           u.fecha_de_nacimiento,
+           u.telefono,
+           u.Departamento,
+           u.Ciudad,
+           u.Direccion,
+           u.Usuario,
+           u.Password,
+           u.Estado,
+           r.roles
+    FROM usuarios u
+    INNER JOIN roles r ON u.rol = r.id
+");
 
 
                     if ($sql->num_rows > 0) {
@@ -135,14 +153,14 @@ if (isset($_SESSION['confirm_message'])) {
                                 <td><?= $datos->Usuario ?></td>
                                 <td><?= $datos->Password ?></td>
                                 <td><?= $datos->Estado ?></td>
-                                <td><?= $datos->rol ?></td>
+                                <td><?= $datos->roles ?></td>
 
 
 
                                 <td>
 
                                     <a href="/admin/editar_usuarios.php?id=<?= $datos->id_usuarios ?>&estado=<?= $datos->Estado ?>&nombres=<?= $datos->Nombres ?>&apellidos=<?= $datos->Apellidos ?>&dni=<?= $datos->DNI ?>&fecha=<?= $datos->fecha_de_nacimiento ?>&telefono=<?= $datos->telefono ?>&departamento=<?= $datos->Departamento ?>&rol=<?= $datos->rol ?>&ciudad=<?= $datos->Ciudad ?>&direccion=<?= $datos->Direccion ?>&usuario=<?= $datos->Usuario ?>&contraseña=<?= $datos->Password ?>&rol=<?= $datos->rol ?>" class="btn btn-small btn-warning"><i class="fa-solid fa-pen-to-square"></i></a>
-                                    <a  href="/admin/eliminar.php?id=<?= $datos->id_usuarios ?>" class="btn btn-small btn-danger"><i class="fa-solid fa-trash"></i></a>
+                                    <a href="/admin/eliminar.php?id=<?= $datos->id_usuarios ?>" class="btn btn-small btn-danger"><i class="fa-solid fa-trash"></i></a>
 
                                 </td>
                             </tr>
