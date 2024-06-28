@@ -28,7 +28,7 @@ $sql_check = "SELECT * FROM documentos WHERE id_usuarios = $id_usuarios LIMIT 1"
 $result = $conexion->query($sql_check);
 
 if ($result->num_rows > 0) {
-    $_SESSION['message'] = "<p style='color: green;'>Ya existe un registro de documentos para este usuario, ya puedes prestar el servicio.</p>";
+    $_SESSION['success_mensaje'] = "<p style='color: green;'>Ya existe un registro de documentos para este usuario, ya puedes prestar el servicio.</p>";
     header("Location: ../../../php/sermototaxista.php");
     exit();
 }

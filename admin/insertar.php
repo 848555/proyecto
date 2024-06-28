@@ -66,7 +66,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         $_SESSION['datos_formulario'] = compact('nombres', 'apellidos', 'dni', 'fecha', 'telefono', 'departamento', 'ciudad', 'direccion', 'usuario', 'contraseña', 'estado', 'rol');
 
         // Redireccionar de vuelta a la página de agregar_usuarios.php
-        header("location: agregar_usuarios.php");
+        header("location: index.php");
         exit();
     } else {
         // Preparar la consulta SQL para insertar los datos en la tabla usuarios

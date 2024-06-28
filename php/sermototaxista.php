@@ -5,7 +5,7 @@ session_start();
 // Verificar si el usuario tiene acceso al contenido de esta página
 if (!isset($_SESSION['id_usuario']) || $_SESSION['rol'] != 2) {
     // Redireccionar a la página de inicio de sesión si no hay sesión iniciada o el rol no es correcto
-    header("Location: /php/login.php");
+    header("Location: ../../../login/login.php");
     exit;
 }
 
@@ -34,6 +34,12 @@ $user_id = $_SESSION['id_usuario'];
                 echo $_SESSION['success_message'];
                 echo "</div>";
                 unset($_SESSION['success_message']); // Eliminar el mensaje de sesión después de mostrarlo
+            }
+            if (isset($_SESSION['success_mensaje'])) {
+                echo "<div id='success-mensaje' class='alert-mensaje alert-mensaje-success'>";
+                echo $_SESSION['success_mensaje'];
+                echo "</div>";
+                unset($_SESSION['success_mensaje']); // Eliminar el mensaje de sesión después de mostrarlo
             }
             if (isset($_SESSION['error_message'])) {
                 echo "<div id='error-message' class='alert-message alert-message-error'>";

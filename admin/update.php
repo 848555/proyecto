@@ -18,6 +18,21 @@ $direccion = mysqli_real_escape_string($conexion, $_POST["direccion"]);
 $estado = mysqli_real_escape_string($conexion, $_POST["estado"]);
 $rol = mysqli_real_escape_string($conexion, $_POST["rol"]);
 
+// Consulta para obtener los roles permitidos
+$sql_roles = "SELECT id FROM roles WHERE id IN (1, 2)";
+$result_roles = $conexion->query($sql_roles);
+$roles_permitidos = [];
+while ($row = $result_roles->fetch_assoc()) {
+    $roles_permitidos[] = $row['id'];
+}
+
+// Verificar si el rol seleccionado está permitido
+if (!in_array($rol, $roles_permitidos)) {
+    $_SESSION['error_message'] = "<p style='color: red;'>Rol seleccionado no válido.</p>";
+    header("Location: ../../../admin/index.php");
+    exit; // Asegurar que se detiene la ejecución después de redirigir
+}
+
 // Consulta para obtener los datos actuales del usuario
 $sql_select = "SELECT * FROM usuarios WHERE id_usuarios='$id'";
 $resultado_select = $conexion->query($sql_select);
@@ -66,8 +81,7 @@ if ($resultado_select->num_rows > 0) {
 
         if ($resultado_update) {
             $_SESSION['success_message'] = "<p style='color: green;'>Usuario actualizado correctamente.</p>";
-            header("Location: ../../../admin/index_principal.php");
-
+            header("Location: ../../../admin/index.php");
             exit; // Asegurar que se detiene la ejecución después de redirigir
         } else {
             $_SESSION['error_message'] = "Error al actualizar el usuario: " . $conexion->error;
