@@ -135,14 +135,13 @@ INSERT INTO `departamentos` (`id_departamentos`, `departamentos`) VALUES
 CREATE TABLE `documentos` (
   `id` int(11) NOT NULL,
   `Licencia_de_conducir` varchar(250) NOT NULL,
-  `Tarjeta_de_propiedad` varchar(250) NOT NULL,`Soat` varchar(250) NOT NULL,
+  `Tarjeta_de_propiedad` varchar(250) NOT NULL,
+  `Soat` varchar(250) NOT NULL,
   `Tecno_mecanica` varchar(250) NOT NULL,
   `Placa` varchar(50) NOT NULL,
   `Marca` varchar(50) NOT NULL,
   `Modelo` varchar(50) NOT NULL,
   `Color` varchar(50) NOT NULL,
-  
-
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_general_ci;
 
 --

@@ -67,14 +67,15 @@ $resultado = $conexion->query($sql);
                 <thead class="bg bg-info">
                     <tr>
                         <th scope="col">ID</th>
+                        <th scope="col">NOMBRES</th>
+                        <th scope="col">APELLIDOS</th>
                         <th scope="col">ORIGEN</th>
                         <th scope="col">DESTINO</th>
                         <th scope="col">CANTIDAD DE PERSONAS</th>
                         <th scope="col">CANTIDAD DE MOTOS</th>
                         <th scope="col">METODO DE PAGO</th>
                         <th scope="col">ESTADO</th>
-                        <th scope="col">NOMBRES</th>
-                        <th scope="col">APELLIDOS</th>
+     
                         <th scope="col">ACCION</th>
                     </tr>
                 </thead>
@@ -85,14 +86,15 @@ $resultado = $conexion->query($sql);
                     ?>
                             <tr>
                                 <td><?= $datos->id_solicitud ?></td>
+                                <td><?= $datos->Nombres ?></td>
+                                <td><?= $datos->Apellidos ?></td>
                                 <td><?= $datos->origen ?></td>
                                 <td><?= $datos->destino ?></td>
                                 <td><?= $datos->cantidad_personas ?></td>
                                 <td><?= $datos->cantidad_motos ?></td>
                                 <td><?= $datos->metodo_pago ?></td>
                                 <td><?= $datos->estado ?></td>
-                                <td><?= $datos->Nombres ?></td>
-                                <td><?= $datos->Apellidos ?></td>
+                                
                                 <td>
                                     <a onclick="return eliminar()" href="/admin/eliminar_servicios.php?id_solicitud=<?= $datos->id_solicitud ?>" class="btn btn-small btn-danger"><i class="fa-solid fa-trash"></i></a>
                                 </td>

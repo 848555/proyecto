@@ -70,7 +70,7 @@ $conexion->close();
 
         <?php if ($_SERVER['REQUEST_METHOD'] != 'POST'): ?>
         <p>Total de retenciones pendientes: <?php echo $total_retencion; ?> pesos</p>
-        <form method="post" action="/php/procesar/pagar_retenciones.php">
+        <form method="post" action="/php/pagar_retenciones.php">
             <button class="button" type="submit">Pagar Retenciones</button>
             <a class="regresar" href="/php/inicio.php">Regresar</a>
         </form>
