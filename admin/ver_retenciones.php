@@ -143,10 +143,12 @@ $sql = $conexion->query($query);
                     }
                     // Mostrar mensaje si existe
                     if (isset($_SESSION['mensaje'])) {
-                        echo '<script>alert("' . $_SESSION['mensaje'] . '");</script>';
+                        echo '<div class="alert alert-success">' . $_SESSION['mensaje'] . '</div>';
                         unset($_SESSION['mensaje']);
                     }
                     ?>
+
+                    
                 </tbody>
             </table>
         </div>

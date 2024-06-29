@@ -1,7 +1,11 @@
-<?php 
+<?php
 
 session_start();
 
+include('/xampp/htdocs/prueba/conexion/conexion.php');
+
+$sql_departamentos = "SELECT id_departamentos, departamentos FROM departamentos";
+$resultado_departamentos = $conexion->query($sql_departamentos);
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -34,7 +38,7 @@ session_start();
                     <button id="btn__registrarse">Regístrarse</button>
                 </div>
             </div>
-          <!--Formulario de Login y registro-->
+            <!--Formulario de Login y registro-->
             <div class="contenedor__login-register">
                 <!--Login-->
                 <form action="/login/ph/validar.php" method="POST" class="formulario__login">
@@ -51,8 +55,8 @@ session_start();
                     ?>
                     <input type="text" placeholder="Usuario" name="usuario" id="usuario">
                     <input type="password" placeholder="Contraseña" name="password" id="password">
-                    <button type="submit" class="btn btn-primary" name="btn" value="ok" >Ingresar</button>
-                    <a  class="recordar"   href="/recuperar_contraseña/cambiar_contraseña.php">Recuperar contraseña</a>
+                    <button type="submit" class="btn btn-primary" name="btn" value="ok">Ingresar</button>
+                    <a class="recordar" href="/recuperar_contraseña/cambiar_contraseña.php">Recuperar contraseña</a>
                 </form>
                 <!--Registro-->
 
@@ -64,51 +68,66 @@ session_start();
                     <input type="text" placeholder="Documento de Identidad" name="dni" id="dni">
                     <input type="date" placeholder="Fecha de Nacimiento" name="fecha" id="fecha">
                     <input type="text" placeholder="Telefono" name="telefono" id="telefono"> <br> <br>
-                    <?php
-        include("/xampp/htdocs/prueba/conexion/conexion.php");
-        $sql = $conexion->query("SELECT id_departamentos,departamentos from departamentos");
-        ?>
-        <label for="departamento" >Departamento de Residencia</label>
-        <select name="departamento" id="departamento" class="form-select form-select-sm">
-            <?php
-            while ($datos = mysqli_fetch_array($sql)) {
-            ?>
-                <option value="<?php echo $datos['departamentos'] ?>"><?php echo $datos['departamentos'] ?> </option >
+                    <!-- Combo box para seleccionar departamento -->
+                    <div class="mb-3">
+                        <label for="departamento" class="form-label">Departamento</label>
+                        <select name="departamento" id="departamento" class="form-select form-select-sm" onchange="getCiudades()">
+                            <option value="">Selecciona un departamento</option>
+                            <?php
+                            while ($departamento = $resultado_departamentos->fetch_assoc()) {
+                                echo '<option value="' . $departamento['id_departamentos'] . '">' . $departamento['departamentos'] . '</option>';
+                            }
+                            ?>
+                        </select>
+                    </div>
+                    <!-- Combo box para seleccionar ciudad -->
+                    <div class="mb-3">
+                        <label for="ciudad" class="form-label">Ciudad</label>
+                        <select name="ciudad" id="ciudad" class="form-select form-select-sm">
+                            <option value="">Selecciona una ciudad</option>
+                        </select>
+                    </div>
 
-            <?php
-            } ?>
 
-        </select> <br>
-        <?php
-        include("/xampp/htdocs/prueba/conexion/conexion.php");
-        $sql = $conexion->query("SELECT * from ciudades");
-        ?>
-        <label for="ciudad" class="form-label">CIUDAD</label>
-        <select name="ciudad" id="ciudad" class="form-select form-select-sm">
-            <?php
-            while ($datos = mysqli_fetch_array($sql)) {
-            ?>
-                <option value="<?php echo $datos['ciudades'] ?>"><?php echo $datos['ciudades'] ?></option>
-
-            <?php
-            } ?>
-
-        </select>
-                
-                    
                     <input type="text" placeholder="Direccion de residencia" name="direccion" id="direccion">
                     <input type="text" placeholder="Usuario" name="usuario" id="usuario">
                     <div class="password-container">
-                    <input type="password" placeholder="Contraseña" name="contraseña" id="contraseña" class="password-input">
-                    <i class="fas fa-eye toggle-password" onclick="togglePasswordVisibility('contraseña')"></i>
+                        <input type="password" placeholder="Contraseña" name="contraseña" id="contraseña" class="password-input">
+                        <i class="fas fa-eye toggle-password" onclick="togglePasswordVisibility('contraseña')"></i>
                     </div>
                     <button type="submit" class="btn btn-primary" name="btnregistrar" value="ok">Regístrarme</button>
                 </form>
             </div>
-        </div>    </main>
+        </div>
+    </main>
+    <!-- Script JavaScript para obtener ciudades según el departamento seleccionado -->
+    <script>
+        function getCiudades() {
+            var departamentoId = document.getElementById("departamento").value;
+            var xhr = new XMLHttpRequest();
+            xhr.open("GET", "/admin/obtener_ciudades.php?departamento=" + departamentoId, true);
+            xhr.onreadystatechange = function() {
+                if (xhr.readyState == 4 && xhr.status == 200) {
+                    var ciudades = JSON.parse(xhr.responseText);
+                    var ciudadSelect = document.getElementById("ciudad");
+                    ciudadSelect.innerHTML = '<option value="">Selecciona una ciudad</option>';
+                    ciudades.forEach(function(ciudad) {
+                        var option = document.createElement("option");
+                        option.value = ciudad.id_ciudades;
+                        option.textContent = ciudad.ciudades;
+                        ciudadSelect.appendChild(option);
+                    });
+                }
+            };
+            xhr.send();
+        }
+    </script>
+
+    <!-- Scripts necesarios de Bootstrap y JavaScript -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-ho+j7jyWK8fNQe+A12cX3mB90+JN1+W8cl/xpRXVlmiHE7fZpL4pacoLHZYNt1w1" crossorigin="anonymous"></script>
 
     <script src="/login/js/escript.js"></script>
-   
+
 </body>
 
 </html>

@@ -31,6 +31,8 @@ $sql = $conexion->query("
     INNER JOIN roles r ON u.rol = r.id
 ");
 
+$sql_departamentos = "SELECT id_departamentos, departamentos FROM departamentos";
+$resultado_departamentos = $conexion->query($sql_departamentos);
 ?>
 <!DOCTYPE html>
 <html lang="es">
@@ -245,84 +247,101 @@ $sql = $conexion->query("
                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
                 <div class="modal-body">
-                    <!-- Contenido del formulario de inserción -->
-                    <form action="/admin/insertar.php" method="POST">
-                        <div class="mb-3">
-                            <label for="nombres" class="form-label">Nombres</label>
-                            <input type="text" class="form-control" name="nombres">
-                        </div>
-                        <div class="mb-3">
-                            <label for="apellidos" class="form-label">Apellidos</label>
-                            <input type="text" class="form-control" name="apellidos">
-                        </div>
-                        <div class="mb-3">
-                            <label for="dni" class="form-label">DNI</label>
-                            <input type="text" class="form-control" name="dni">
-                        </div>
-                        <div class="mb-3">
-                            <label for="fecha" class="form-label">Fecha de Nacimiento</label>
-                            <input type="date" class="form-control" name="fecha">
-                        </div>
-                        <div class="mb-3">
-                            <label for="telefono" class="form-label">Teléfono</label>
-                            <input type="text" class="form-control" name="telefono">
-                        </div>
-                        <?php
-        include("/xampp/htdocs/prueba/conexion/conexion.php");
-        $sql = $conexion->query("SELECT id_departamentos,departamentos from departamentos");
-        ?>
-        <label for="exampleInputEmail1" class="form-label">DEPARTAMENTO</label>
-        <select name="departamento" class="form-select form-select-sm">
+                    
+<!-- Formulario para agregar nuevo usuario -->
+<form action="/admin/insertar.php" method="POST">
+    <div class="mb-3">
+        <label for="nombres" class="form-label">Nombres</label>
+        <input type="text" class="form-control" name="nombres">
+    </div>
+    <div class="mb-3">
+        <label for="apellidos" class="form-label">Apellidos</label>
+        <input type="text" class="form-control" name="apellidos">
+    </div>
+    <div class="mb-3">
+        <label for="dni" class="form-label">DNI</label>
+        <input type="text" class="form-control" name="dni">
+    </div>
+    <div class="mb-3">
+        <label for="fecha" class="form-label">Fecha de Nacimiento</label>
+        <input type="date" class="form-control" name="fecha">
+    </div>
+    <div class="mb-3">
+        <label for="telefono" class="form-label">Teléfono</label>
+        <input type="text" class="form-control" name="telefono">
+    </div>
+    <!-- Combo box para seleccionar departamento -->
+    <div class="mb-3">
+        <label for="departamento" class="form-label">Departamento</label>
+        <select name="departamento" id="departamento" class="form-select form-select-sm" onchange="getCiudades()">
+            <option value="">Selecciona un departamento</option>
             <?php
-            while ($datos = mysqli_fetch_array($sql)) {
+            while ($departamento = $resultado_departamentos->fetch_assoc()) {
+                echo '<option value="' . $departamento['id_departamentos'] . '">' . $departamento['departamentos'] . '</option>';
+            }
             ?>
-                <option value="<?php echo $datos['departamentos'] ?>"><?php echo $datos['departamentos'] ?></option>
-
-            <?php
-            } ?>
-
         </select>
-        <?php
-        include("/xampp/htdocs/prueba/conexion/conexion.php");
-        $sql = $conexion->query("SELECT *from ciudades");
-        ?>
-        <label for="exampleInputEmail1" class="form-label">CIUDAD</label>
-        <select name="ciudad" class="form-select form-select-sm">
-            <?php
-            while ($datos = mysqli_fetch_array($sql)) {
-            ?>
-                <option value="<?php echo $datos['ciudades'] ?>"><?php echo $datos['ciudades'] ?></option>
-
-            <?php
-            } ?>
-
+    </div>
+    <!-- Combo box para seleccionar ciudad -->
+    <div class="mb-3">
+        <label for="ciudad" class="form-label">Ciudad</label>
+        <select name="ciudad" id="ciudad" class="form-select form-select-sm">
+            <option value="">Selecciona una ciudad</option>
         </select>
-                        <div class="mb-3">
-                            <label for="direccion" class="form-label">Dirección</label>
-                            <input type="text" class="form-control" name="direccion">
-                        </div>
-                        <div class="mb-3">
-                            <label for="usuario" class="form-label">Usuario</label>
-                            <input type="text" class="form-control" name="usuario">
-                        </div>
-                        <div class="mb-3">
-                            <label for="password" class="form-label">Contraseña</label>
-                            <input type="password" class="form-control" name="contraseña">
-                        </div>
-                        <div class="mb-3">
-                            <label for="estado" class="form-label">Estado</label>
-                            <input type="text" class="form-control" name="estado">
-                        </div>
-                        <div class="mb-3">
-                            <label for="rol" class="form-label">Rol</label>
-                            <input type="text" class="form-control" name="rol">
-                        </div>
-                        <button type="submit" class="btn btn-primary">Guardar Usuario</button>
-                    </form>
+    </div>
+   
+    <div class="mb-3">
+        <label for="direccion" class="form-label">Dirección</label>
+        <input type="text" class="form-control" name="direccion">
+    </div>
+    <div class="mb-3">
+        <label for="usuario" class="form-label">Usuario</label>
+        <input type="text" class="form-control" name="usuario">
+    </div>
+    <div class="mb-3">
+        <label for="password" class="form-label">Contraseña</label>
+        <input type="password" class="form-control" name="contraseña">
+    </div>
+    <div class="mb-3">
+        <label for="estado" class="form-label">Estado</label>
+        <input type="text" class="form-control" name="estado">
+    </div>
+    <div class="mb-3">
+        <label for="rol" class="form-label">Rol</label>
+        <input type="text" class="form-control" name="rol">
+    </div>
+    <button type="submit" class="btn btn-primary">Guardar Usuario</button>
+</form>
+
                 </div>
             </div>
         </div>
     </div>
+<!-- Script JavaScript para obtener ciudades según el departamento seleccionado -->
+<script>
+function getCiudades() {
+    var departamentoId = document.getElementById("departamento").value;
+    var xhr = new XMLHttpRequest();
+    xhr.open("GET", "/admin/obtener_ciudades.php?departamento=" + departamentoId, true);
+    xhr.onreadystatechange = function() {
+        if (xhr.readyState == 4 && xhr.status == 200) {
+            var ciudades = JSON.parse(xhr.responseText);
+            var ciudadSelect = document.getElementById("ciudad");
+            ciudadSelect.innerHTML = '<option value="">Selecciona una ciudad</option>';
+            ciudades.forEach(function(ciudad) {
+                var option = document.createElement("option");
+                option.value = ciudad.id_ciudades;
+                option.textContent = ciudad.ciudades;
+                ciudadSelect.appendChild(option);
+            });
+        }
+    };
+    xhr.send();
+}
+</script>
+
+<!-- Scripts necesarios de Bootstrap y JavaScript -->
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-ho+j7jyWK8fNQe+A12cX3mB90+JN1+W8cl/xpRXVlmiHE7fZpL4pacoLHZYNt1w1" crossorigin="anonymous"></script>
 
     <script src="/admin/js/buscador.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz" crossorigin="anonymous"></script>
