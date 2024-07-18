@@ -1,6 +1,17 @@
 <?php
 
+// Iniciar la sesión
 session_start();
+
+// Verificar si el usuario está autenticado
+$validar = $_SESSION['usuario'];
+
+// Si el usuario no está autenticado, redirigir al formulario de inicio de sesión
+if ($validar == null || $validar == '') {
+    header("Location:../login/login.php");
+    die();
+}
+
 include("/xampp/htdocs/prueba/conexion/conexion.php");
 
 $sql = $conexion->query("
@@ -18,7 +29,18 @@ $sql = $conexion->query("
     FROM documentos d
     INNER JOIN usuarios u ON d.id_usuarios = u.id_usuarios
 ");
+// Obtener el ID del usuario de la sesión
+$id_usuario_sesion = $_SESSION['id_usuario'];
 
+// Consulta para obtener nombres, apellidos y DNI del usuario de la sesión
+$sql_usuario_sesion = "SELECT Nombres, Apellidos, DNI FROM usuarios WHERE id_usuarios = ?";
+$stmt_usuario_sesion = $conexion->prepare($sql_usuario_sesion);
+$stmt_usuario_sesion->bind_param("i", $id_usuario_sesion);
+$stmt_usuario_sesion->execute();
+$result_usuario_sesion = $stmt_usuario_sesion->get_result();
+$usuario_sesion = $result_usuario_sesion->fetch_assoc();
+
+$sql_acciones = "SELECT id_usuarios FROM usuarios";
 ?>
 
 <!DOCTYPE html>
@@ -45,6 +67,17 @@ if (isset($_SESSION['error'])) {
     echo '<div class="alert alert-danger">' . $_SESSION['error'] . '</div>';
     unset($_SESSION['error']); // Limpiar mensaje de error
 }
+ // Mostrar mensajes de error si existen
+ if (isset($_SESSION['error_message'])) {
+    echo '<div class="alert alert-danger alert-message">' . $_SESSION['error_message'] . '</div>';
+    unset($_SESSION['error_message']); // Limpiar el mensaje después de mostrarlo
+}
+
+// Mostrar mensaje de usuario actualizado si existe
+if (isset($_SESSION['success_message'])) {
+    echo '<div class="alert alert-success alert-message">' . $_SESSION['success_message'] . '</div>';
+    unset($_SESSION['success_message']); // Limpiar el mensaje después de mostrarlo
+}
 ?>
 <body>
     <nav class="navbar navbar-expand-lg bg-body-tertiary">
@@ -57,14 +90,15 @@ if (isset($_SESSION['error'])) {
                     <li class="nav-item">
                         <a class="nav-link active" aria-current="page" href="/admin/index.php">Inicio</a>
                     </li>
-                    <li class="nav-item">
-                        <a class="nav-link" href="/login/login.php?vista=logout">Salir</a>
-                    </li>
+                   
                 </ul>
             </div>
         </div>
     </nav>
     <h1 class="text-center p-3">DOCUMENTOS DE MOTOTAXISTAS</h1>
+      <!-- Botón para abrir el modal de registrar acciones -->
+      <button type="button" class="btn btn-primary mb-3" data-bs-toggle="modal" data-bs-target="#accionesModal">Intermediacion</button>
+
     <div class="container-fluid"><br>
         <form class="d-flex">
             <input class="form-control me-2 light-table-filter" data-table="table" type="text" placeholder="Buscar">
@@ -124,6 +158,51 @@ if (isset($_SESSION['error'])) {
             </table>
         </div>
     </div>
+    <!-- Modal para acciones -->
+<div class="modal fade" id="accionesModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="exampleModalLabel">Registrar Acción</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <!-- Contenido del formulario de registro de acción -->
+                <form action="/admin/acciones_modal/registrar_acciones_docu.php" method="POST">
+                <div class="mb-3">
+                        <label for="id_administrador" class="form-label">ID del Administrador</label>
+                        <input type="text" class="form-control" name="id_administrador" value="<?php echo isset($_SESSION['id_usuario']) ? $_SESSION['id_usuario'] : ''; ?>" readonly>
+                    </div>
+                    <div class="mb-3">
+                        <label for="nombres" class="form-label">Nombres del Administrador</label>
+                        <input type="text" class="form-control" name="nombres" value="<?php echo isset($usuario_sesion['Nombres']) ? $usuario_sesion['Nombres'] : ''; ?>" readonly>
+                    </div>
+                    <div class="mb-3">
+                        <label for="apellidos" class="form-label">Apellidos del Administrador</label>
+                        <input type="text" class="form-control" name="apellidos" value="<?php echo isset($usuario_sesion['Apellidos']) ? $usuario_sesion['Apellidos'] : ''; ?>" readonly>
+                    </div>
+                    <div class="mb-3">
+                        <label for="dni" class="form-label">Documento del Administrador</label>
+                        <input type="num" class="form-control" name="DNI" value="<?php echo isset($usuario_sesion['DNI']) ? $usuario_sesion['DNI'] : ''; ?>" readonly>
+                    </div>
+                    <div class="mb-3">
+                            <label for="tipo_accion" class="form-label">Tipo de Intervención</label>
+                            <select class="form-select" name="tipo_accion">
+                                <option value="3">Eliminar Documentos</option>
+                            </select>
+                        </div>
+                    <div class="mb-3">
+                        <label for="descripcion" class="form-label">Descripción de la Acción</label>
+                        <textarea class="form-control" name="descripcion" rows="3"></textarea>
+                    </div>
+                    <input type="hidden" name="id_usuario_objetivo" id="id_usuario_objetivo">
+                    <button type="submit" class="btn btn-primary">Registrar Acción</button>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
 
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz" crossorigin="anonymous"></script>
     <script src="/admin/js/buscador.js"></script>
