@@ -10,7 +10,7 @@ if (isset($_POST['usuario']) && isset($_POST['password'])) {
     $password = $_POST['password'];
 
     // Preparar y ejecutar la consulta SQL de forma segura para prevenir inyecciones SQL
-    $consulta = "SELECT * FROM usuarios WHERE Usuario=? AND Password=?";
+    $consulta = "SELECT * FROM usuarios WHERE Usuario=?";
     $stmt = mysqli_prepare($conexion, $consulta);
 
     // Verificar si la preparación de la consulta fue exitosa
@@ -18,7 +18,7 @@ if (isset($_POST['usuario']) && isset($_POST['password'])) {
         die("Error en la preparación de la consulta: " . mysqli_error($conexion));
     }
 
-    mysqli_stmt_bind_param($stmt, "ss", $usuario, $password);
+    mysqli_stmt_bind_param($stmt, "s", $usuario);
     mysqli_stmt_execute($stmt);
 
     // Obtener el resultado de la consulta
@@ -33,32 +33,43 @@ if (isset($_POST['usuario']) && isset($_POST['password'])) {
 
     // Verificar el resultado de la consulta
     if ($filas) {
-        // Verificar el estado del usuario
-        $estado_usuario = $filas['Estado'];
+        // Imprimir las contraseñas para depuración
+        echo "Contraseña ingresada: " . $password . "<br>";
+        echo "Contraseña almacenada: " . $filas['Password'] . "<br>";
 
-        if ($estado_usuario == 'Sancionado') {
-            $_SESSION['error'] = "El usuario está sancionado y no puede iniciar sesión.";
+        // Verificar la contraseña
+        if (password_verify($password, $filas['Password'])) {
+            // Verificar el estado del usuario
+            $estado_usuario = $filas['Estado'];
+
+            if ($estado_usuario == 'Sancionado') {
+                $_SESSION['error'] = "El usuario está sancionado y no puede iniciar sesión.";
+                header('Location: ../login.php');
+                exit();
+            } elseif ($estado_usuario == 'Inactivo') {
+                $_SESSION['error'] = "El usuario está inactivo y no puede iniciar sesión.";
+                header('Location: ../login.php');
+                exit();
+            }
+
+            // Guardar datos en la sesión
+            $_SESSION['usuario'] = $usuario;
+            $_SESSION['id_usuario'] = $filas['id_usuarios'];
+            $_SESSION['rol'] = $filas['rol'];
+
+            // Redirigir según el rol del usuario
+            if ($filas['rol'] == 1) { // administrador
+                header('Location: ../../../../admin/index.php');
+                exit();
+            } elseif ($filas['rol'] == 2) { // usuario
+                $_SESSION['mensaje'] = "¡Inicio de sesión exitoso!";
+                header('Location: ../../../../php/inicio.php');
+                exit();
+            }
+        } else {
+            // Manejar inicio de sesión incorrecto  
+            $_SESSION['error'] = "Error: El usuario o la contraseña son incorrectos, por favor verifica e intenta de nuevo.";
             header('Location: ../login.php');
-            exit();
-        } 
-         elseif ($estado_usuario == 'Inactivo') {
-            $_SESSION['error'] = "El usuario está inactivo y no puede iniciar sesión.";
-            header('Location: ../login.php');
-            exit();
-        }
-
-        // Guardar datos en la sesión
-        $_SESSION['usuario'] = $usuario;
-        $_SESSION['id_usuario'] = $filas['id_usuarios'];
-        $_SESSION['rol'] = $filas['rol'];
-
-        // Redirigir según el rol del usuario
-        if ($filas['rol'] == 1) { // administrador
-            header('Location: ../../../../admin/index.php');
-            exit();
-        } elseif ($filas['rol'] == 2) { // usuario
-            $_SESSION['mensaje'] = "¡Inicio de sesión exitoso!";
-            header('Location: ../../../../php/inicio.php');
             exit();
         }
     } else {

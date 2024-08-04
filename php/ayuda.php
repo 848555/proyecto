@@ -37,18 +37,14 @@
                 <p>1. Ve a la página principal de la aplicación.</p>
                 <p>2. Haz clic en el botón "Registrarse".</p>
                 <p>3. Completa el formulario con tus datos personales.</p>
-                <p>4. Recibirás un correo de confirmación para activar tu cuenta.</p>
+                <p>4. y listo te saldra un mensaje de registro exitoso.</p>
 
                 <h3>¿Cómo iniciar sesión?</h3>
                 <p>1. Ve a la página principal de la aplicación.</p>
                 <p>2. Haz clic en el botón "Iniciar Sesión".</p>
-                <p>3. Introduce tu correo electrónico y contraseña.</p>
+                <p>3. Introduce tu usuario y contraseña.</p>
                 <p>4. Haz clic en "Entrar".</p>
 
-                <h3>¿Cómo recuperar la contraseña?</h3>
-                <p>1. En la página de inicio de sesión, haz clic en "¿Olvidaste tu contraseña?".</p>
-                <p>2. Introduce tu correo electrónico registrado.</p>
-                <p>3. Recibirás un correo con las instrucciones para restablecer tu contraseña.</p>
             </section>
             
             <section id="uso-aplicacion">
@@ -61,13 +57,8 @@
 
                 <h3>¿Cómo pagar por un servicio?</h3>
                 <p>1. Durante la solicitud del servicio, selecciona el método de pago preferido (Efectivo o Nequi).</p>
-                <p>2. Si seleccionaste Nequi, sigue las instrucciones para completar el pago a través de la plataforma Nequi.</p>
-                <p>3. Recibirás una confirmación del pago y la solicitud.</p>
-
-                <h3>¿Cómo ver el historial de solicitudes?</h3>
-                <p>1. Inicia sesión en la aplicación.</p>
-                <p>2. Ve a tu perfil y selecciona "Historial de Solicitudes".</p>
-                <p>3. Aquí podrás ver todas las solicitudes anteriores y su estado.</p>
+                <p>2. Si seleccionaste Nequi, presiona el icono de tres lineas y selecciona pagar, te llevara a nequi alli sigue las instrucciones para completar el pago a través de la plataforma Nequi.</p>
+                <p>3. Recibirás una confirmación del pago de nequi y el mensaje de pago exitoso.</p>
             </section>
             
             <section id="mototaxistas">
@@ -75,13 +66,14 @@
                 <h3>¿Cómo convertirse en mototaxista?</h3>
                 <p>1. Inicia sesión en la aplicación.</p>
                 <p>2. En el menú principal, selecciona "Quiero ser mototaxista".</p>
+                <p>3. te saldra un mensaje donde te informa que debes subir los documentos, presiona aceptar.</p>
                 <p>3. Completa el formulario con la información requerida.</p>
-                <p>4. Espera la confirmación de tu registro como mototaxista.</p>
+                <p>4. si el registro fue exitoso te llevara al apartado para aceptar las solicitudes.</p>
 
                 <h3>¿Cómo aceptar un servicio?</h3>
                 <p>1. Una vez registrado como mototaxista, inicia sesión en la aplicación.</p>
-                <p>2. Ve a la sección de "Servicios Disponibles".</p>
-                <p>3. Selecciona el servicio que deseas aceptar y confirma tu disponibilidad.</p>
+                <p>2. Ve a la sección de "quiero ser mototaxista".</p>
+                <p>3. Selecciona el servicio que deseas aceptar y aceptalo.</p>
             </section>
             
             <section id="pagos">
@@ -95,11 +87,12 @@
 
                 <h3>¿Cómo funciona el pago con Nequi?</h3>
                 <p>1. Selecciona Nequi como método de pago al solicitar un servicio.</p>
-                <p>2. Serás redirigido a la plataforma de Nequi para completar el pago.</p>
-                <p>3. Una vez confirmado el pago, recibirás una notificación en la aplicación.</p>
-
+                <p>2. una vez se te sea prestado el servicio deberas proeder con el pago.</p>
+                <p>3. para eso vez a las tres lineas que aparece en el apartado principal del lado derecho y selecciona pagar.</p>
+                <p>2. escribe tu  numero nequi y se te redireccionara a nequi para que realices el pago sigue el proceso de pago de nequi.</p>
+                
                 <h3>¿Cómo se gestionan las retenciones?</h3>
-                <p>Las retenciones se aplican de acuerdo con las políticas de la aplicación. Puedes ver el estado de tus retenciones en la sección de "Retenciones" de tu perfil.</p>
+                <p>Las retenciones se aplican de acuerdo con las políticas de la aplicación. Puedes ver  tus retenciones en la sección de "Retenciones" de tu perfil.</p>
             </section>
             
             <section id="soporte">

@@ -200,12 +200,12 @@ to{
   --color-scroll-hover:rgb(85,85,85);
 }
 
-.menu{
+.menu {
   position: fixed;
   width: 80px;
   height: 80px;
   font-size: 30px;
-  display: none;
+  display: flex;
   justify-content: center;
   align-items: center;
   border-radius: 50%;

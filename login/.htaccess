@@ -1,0 +1,11 @@
+DirectoryIndex login.php
+
+<IfModule mod_rewrite.c>
+    RewriteEngine On
+    RewriteBase /prueba/
+
+    # Redirigir todas las solicitudes a login.php si no son archivos o directorios existentes
+    RewriteCond %{REQUEST_FILENAME} !-f
+    RewriteCond %{REQUEST_FILENAME} !-d
+    RewriteRule ^ login.php [L]
+</IfModule>

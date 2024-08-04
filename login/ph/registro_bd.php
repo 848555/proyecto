@@ -66,11 +66,14 @@ if ($check_result->num_rows > 0) {
 $estado = 'Activo';
 $rol = '2';
 
+// Encriptar la contraseña
+$contraseña_hashed = password_hash($contraseña, PASSWORD_BCRYPT);
+
 // Preparar la consulta SQL para insertar
 $sql = $conexion->prepare("INSERT INTO usuarios (Nombres, Apellidos, DNI, fecha_de_nacimiento, telefono, Departamento, Ciudad, Direccion, Usuario, Password, Estado, rol) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)");
 
 if ($sql) {
-    $sql->bind_param("ssssssssssss", $nombres, $apellidos, $dni, $fecha, $telefono, $departamento, $ciudad, $direccion, $usuario, $contraseña, $estado, $rol);
+    $sql->bind_param("ssssssssssss", $nombres, $apellidos, $dni, $fecha, $telefono, $departamento, $ciudad, $direccion, $usuario, $contraseña_hashed, $estado, $rol);
     if ($sql->execute()) {
         $_SESSION['mensaje'] = "Te registraste correctamente, Inicia sesión.";
         header("Location: ../login.php");

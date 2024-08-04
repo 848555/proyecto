@@ -9,7 +9,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     foreach ($required_fields as $field) {
         if (!isset($_POST[$field]) || empty($_POST[$field])) {
             $_SESSION['error_message'] = "Todos los campos son obligatorios";
-            header("Location: index.php");
+            header("Location: ../index.php");
             exit();
         }
     }
@@ -30,10 +30,10 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
         $_SESSION['error_message'] = "Error al registrar la acción";
     }
 
-    header("Location: index.php");
+    header("Location: ../index.php");
     exit();
 } else {
     $_SESSION['error_message'] = "Método de solicitud no permitido";
-    header("Location: index.php");
+    header("Location: ../index.php");
     exit();
 }
